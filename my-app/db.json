@@ -1,0 +1,1193 @@
+{
+  "users": [
+    {
+      "id": "16b4",
+      "name": "athif",
+      "number": "45784692",
+      "email": "Athif@gmail.com",
+      "password": "A@thif001",
+      "blocked": false
+    },
+    {
+      "id": "ed66",
+      "name": "athif",
+      "number": "45784",
+      "email": "Athifs@gmail.com",
+      "password": "A@tag457sy",
+      "cart": []
+    },
+    {
+      "id": "61zj",
+      "name": "sfg",
+      "email": "123456@gmail.com",
+      "password": "12345678",
+      "createdAt": "2025-10-28T08:08:02.922Z"
+    },
+    {
+      "id": "2s2d",
+      "name": "eeeee",
+      "email": "ee@gmail.com",
+      "password": "123456789",
+      "createdAt": "2025-10-28T09:29:11.771Z"
+    },
+    {
+      "id": "byfh",
+      "name": "ssmm",
+      "email": "ssmm@gmail.com",
+      "password": "123456789",
+      "createdAt": "2025-10-28T09:31:15.295Z"
+    },
+    {
+      "id": "nwma",
+      "name": "Muhammed Shemin",
+      "email": "sheminmuhammed594@gmail.com",
+      "password": "1234567",
+      "createdAt": "2025-10-28T10:32:01.210Z"
+    },
+    {
+      "id": "sfuc",
+      "name": "muhammed shemin",
+      "email": "shemin888@gmail.com",
+      "password": "shemin@888888",
+      "createdAt": "2025-10-28T14:01:56.564Z"
+    },
+    {
+      "id": "wpx6",
+      "name": "muhammed shemin",
+      "email": "shemin123@gmail.com",
+      "password": "shemin@123",
+      "createdAt": "2025-10-28T14:58:35.521Z"
+    },
+    {
+      "id": "9jnf",
+      "name": "rashad",
+      "email": "rashad111@gmail.com",
+      "password": "rashad@123",
+      "createdAt": "2025-10-29T06:34:58.858Z"
+    },
+    {
+      "id": "ftla",
+      "name": "rashid",
+      "email": "rashid111@gmail.com",
+      "password": "rashid@123",
+      "createdAt": "2025-10-29T07:11:15.916Z"
+    },
+    {
+      "id": "hksz",
+      "name": "farsin",
+      "email": "farsin123@gmail.com",
+      "password": "farsin@111",
+      "createdAt": "2025-10-29T07:24:05.466Z"
+    },
+    {
+      "id": "ruaa",
+      "name": "swalih",
+      "email": "swalih123@gmail.com",
+      "password": "swalih@111",
+      "createdAt": "2025-10-29T07:51:35.149Z"
+    }
+  ],
+  "carts": [
+    {
+      "id": "ae3f",
+      "userId": "ae3f",
+      "items": [],
+      "updatedAt": "2025-10-28T08:07:15.743Z"
+    },
+    {
+      "id": "ae3f",
+      "userId": "ae3f",
+      "items": [],
+      "updatedAt": "2025-10-28T08:07:15.746Z"
+    },
+    {
+      "id": "61zj",
+      "userId": "61zj",
+      "items": [
+        {
+          "id": "2",
+          "team": "Real Madrid",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "price": 299,
+          "category": "Home",
+          "image": "https://dukaan.b-cdn.net/700x700/webp/media/58a48494-680e-4bcf-9759-812314ac26df.png",
+          "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/00a43591-0c0a-412d-805e-18c0633bf517.png",
+          "description": "Official Real Madrid home jersey 2025 edition.",
+          "quantity": 1
+        }
+      ],
+      "updatedAt": "2025-10-28T08:53:26.000Z"
+    },
+    {
+      "id": "61zj",
+      "userId": "61zj",
+      "items": [],
+      "updatedAt": "2025-10-28T08:08:10.639Z"
+    },
+    {
+      "id": "1b5c",
+      "userId": "1b5c",
+      "items": [],
+      "updatedAt": "2025-10-28T11:27:44.383Z"
+    },
+    {
+      "id": "2s2d",
+      "userId": "2s2d",
+      "items": [],
+      "updatedAt": "2025-10-28T09:29:11.794Z"
+    },
+    {
+      "id": "byfh",
+      "userId": "byfh",
+      "items": [],
+      "updatedAt": "2025-10-28T13:34:31.373Z"
+    },
+    {
+      "id": "d7d5",
+      "userId": "nwma",
+      "items": [],
+      "updatedAt": "2025-10-28T10:47:06.693Z"
+    },
+    {
+      "id": "sfuc",
+      "userId": "sfuc",
+      "items": [
+        {
+          "id": "18",
+          "team": "Bayern ",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "price": 240,
+          "category": "Away",
+          "image": "https://dukaan.b-cdn.net/700x700/webp/media/368de851-57d1-4a13-b92e-6f8e65084db0.png",
+          "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/dc334f26-b5c1-4898-98c6-689335955cc2.png",
+          "description": "Official Bayern Munich Away jersey 2025 edition.",
+          "quantity": 1
+        }
+      ],
+      "updatedAt": "2025-10-29T08:56:39.903Z"
+    },
+    {
+      "id": "wpx6",
+      "userId": "wpx6",
+      "items": [
+        {
+          "id": "18",
+          "team": "Bayern ",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "price": 240,
+          "category": "Away",
+          "image": "https://dukaan.b-cdn.net/700x700/webp/media/368de851-57d1-4a13-b92e-6f8e65084db0.png",
+          "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/dc334f26-b5c1-4898-98c6-689335955cc2.png",
+          "description": "Official Bayern Munich Away jersey 2025 edition.",
+          "quantity": 1,
+          "size": "M"
+        },
+        {
+          "id": "15",
+          "team": " Barcelona",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "price": 260,
+          "category": "Away",
+          "image": "https://dukaan.b-cdn.net/700x700/webp/media/aac01075-75f6-495f-8ed7-3b6d78174603.png",
+          "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/7a699755-2929-4045-b4f2-2d882024adbb.png",
+          "description": "Official Barcelona Away jersey 2025 edition.",
+          "size": "L"
+        }
+      ],
+      "updatedAt": "2025-10-29T06:33:28.551Z"
+    },
+    {
+      "id": "9jnf",
+      "userId": "9jnf",
+      "items": [],
+      "updatedAt": "2025-10-29T06:52:10.978Z"
+    },
+    {
+      "id": "ftla",
+      "userId": "ftla",
+      "items": [
+        {
+          "id": "12",
+          "team": "Miami",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "price": 250,
+          "category": "Away",
+          "image": "https://dukaan.b-cdn.net/700x700/webp/media/82f5def3-e10c-425c-8ad3-640a8c5120be.png",
+          "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/f804b8f1-7b28-4876-9165-9022ea768f28.png",
+          "description": "Official Inter Miami Away jersey 2025 edition.",
+          "quantity": 1,
+          "size": "M"
+        },
+        {
+          "id": "18",
+          "team": "Bayern ",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "price": 240,
+          "category": "Away",
+          "image": "https://dukaan.b-cdn.net/700x700/webp/media/368de851-57d1-4a13-b92e-6f8e65084db0.png",
+          "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/dc334f26-b5c1-4898-98c6-689335955cc2.png",
+          "description": "Official Bayern Munich Away jersey 2025 edition.",
+          "quantity": 1
+        },
+        {
+          "id": "14",
+          "team": "Napoli",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "price": 260,
+          "category": "Away",
+          "image": "https://dukaan.b-cdn.net/700x700/webp/media/86e175fd-ad7f-470f-85ea-094465ae1479.png",
+          "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/c03e990c-7eb8-4d1c-83e2-f88ce2e0bdfc.png",
+          "description": "Official Napoli Away jersey 2025 edition.",
+          "quantity": 1
+        },
+        {
+          "id": "10",
+          "team": "Liverpool ",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "price": 280,
+          "category": "Home",
+          "image": "https://dukaan.b-cdn.net/700x700/webp/media/a21e0d86-fc35-47cf-b3eb-4a0bb4c50dd2.png",
+          "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/2ba22a0c-bc7e-46f6-85c3-65ec4613cfff.png",
+          "description": "Official Liverpool home jersey 2025 edition.",
+          "quantity": 1
+        }
+      ],
+      "updatedAt": "2025-10-29T07:23:09.235Z"
+    },
+    {
+      "id": "hksz",
+      "userId": "hksz",
+      "items": [],
+      "updatedAt": "2025-10-29T07:50:46.090Z"
+    },
+    {
+      "id": "ruaa",
+      "userId": "ruaa",
+      "items": [
+        {
+          "id": "31",
+          "team": "Argentina",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "price": 530,
+          "category": "Special Edition",
+          "image": "https://dukaan.b-cdn.net/700x700/webp/media/29919060-4646-44ed-9516-c604b79bade2.png",
+          "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/da95cf89-931f-4442-8f92-7bf73c1a0f13.png",
+          "description": "Official Argentina Special Edition Jersey.",
+          "size": "M",
+          "quantity": 1
+        }
+      ],
+      "updatedAt": "2025-10-29T09:15:47.057Z"
+    }
+  ],
+  "orders": [
+    {
+      "id": "1761639484076",
+      "userId": "61zj",
+      "items": [
+        {
+          "id": "6",
+          "team": "Arsenal",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "price": 320,
+          "category": "Home",
+          "image": "https://dukaan.b-cdn.net/700x700/webp/media/8767e8f2-0cee-4589-bc6b-5a96b3d2d2b5.png",
+          "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/e9d987f1-9ebe-410e-b455-7db7e4386e62.png",
+          "description": "Official Arsenal home jersey 2025 edition.",
+          "quantity": 1
+        },
+        {
+          "id": "11",
+          "team": "Psg",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "price": 299,
+          "category": "Home",
+          "image": "https://dukaan.b-cdn.net/700x700/webp/media/25bc269b-5622-4b87-8901-43c5fc73abdd.png",
+          "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/db7ba792-4031-44f6-9a18-5a012ce708e8.png",
+          "description": "Official Psg home jersey 2025 edition.",
+          "quantity": 1
+        },
+        {
+          "id": "2",
+          "team": "Real Madrid",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "price": 299,
+          "category": "Home",
+          "image": "https://dukaan.b-cdn.net/700x700/webp/media/58a48494-680e-4bcf-9759-812314ac26df.png",
+          "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/00a43591-0c0a-412d-805e-18c0633bf517.png",
+          "description": "Official Real Madrid home jersey 2025 edition.",
+          "quantity": 3
+        },
+        {
+          "id": "1",
+          "team": "Miami",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "price": 299,
+          "category": "Home",
+          "image": "https://dukaan.b-cdn.net/700x700/webp/media/1a9dd58e-d683-4569-b4ff-5c016658a7c4.png",
+          "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/91e0d1fd-2d10-4ba8-84bc-c17df04fe2f0.png",
+          "description": "Official Miami Heat home jersey 2025 edition.",
+          "quantity": 2
+        }
+      ],
+      "total": 2114,
+      "name": "fefewwfew",
+      "address": "wdfewfwewf",
+      "payment": "Credit / Debit Card",
+      "date": "28/10/2025, 1:48:04 pm",
+      "createdAt": "2025-10-28T08:18:04.085Z"
+    },
+    {
+      "id": "1761639736158",
+      "userId": "1b5c",
+      "items": [
+        {
+          "id": "2",
+          "team": "Real Madrid",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "price": 299,
+          "category": "Home",
+          "image": "https://dukaan.b-cdn.net/700x700/webp/media/58a48494-680e-4bcf-9759-812314ac26df.png",
+          "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/00a43591-0c0a-412d-805e-18c0633bf517.png",
+          "description": "Official Real Madrid home jersey 2025 edition.",
+          "quantity": 1
+        }
+      ],
+      "total": 299,
+      "name": "iuhygfds",
+      "address": "jhgfdsa",
+      "payment": "Cash on Delivery",
+      "date": "28/10/2025, 13:52:16",
+      "createdAt": "2025-10-28T08:22:16.171Z"
+    },
+    {
+      "id": "1761640369719",
+      "userId": "61zj",
+      "items": [
+        {
+          "id": "6",
+          "team": "Arsenal",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "price": 320,
+          "category": "Home",
+          "image": "https://dukaan.b-cdn.net/700x700/webp/media/8767e8f2-0cee-4589-bc6b-5a96b3d2d2b5.png",
+          "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/e9d987f1-9ebe-410e-b455-7db7e4386e62.png",
+          "description": "Official Arsenal home jersey 2025 edition.",
+          "quantity": 1,
+          "size": "L"
+        }
+      ],
+      "total": 320,
+      "name": "hhhh",
+      "address": "llllll",
+      "payment": "Credit / Debit Card",
+      "date": "28/10/2025, 2:02:49 pm",
+      "createdAt": "2025-10-28T08:32:49.730Z"
+    },
+    {
+      "id": "1761644511529",
+      "userId": "byfh",
+      "items": [
+        {
+          "id": "2",
+          "team": "Real Madrid",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "price": 299,
+          "category": "Home",
+          "image": "https://dukaan.b-cdn.net/700x700/webp/media/58a48494-680e-4bcf-9759-812314ac26df.png",
+          "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/00a43591-0c0a-412d-805e-18c0633bf517.png",
+          "description": "Official Real Madrid home jersey 2025 edition.",
+          "quantity": 1
+        }
+      ],
+      "total": 299,
+      "name": "wedfhjewvfwhj",
+      "address": "qwjkfbhqwjk",
+      "payment": "Cash on Delivery",
+      "date": "28/10/2025, 3:11:51 pm",
+      "createdAt": "2025-10-28T09:41:51.537Z"
+    },
+    {
+      "id": "1761647549494",
+      "userId": "nwma",
+      "items": [
+        {
+          "id": "2",
+          "team": "Real Madrid",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "price": 299,
+          "category": "Home",
+          "image": "https://dukaan.b-cdn.net/700x700/webp/media/58a48494-680e-4bcf-9759-812314ac26df.png",
+          "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/00a43591-0c0a-412d-805e-18c0633bf517.png",
+          "description": "Official Real Madrid home jersey 2025 edition.",
+          "quantity": 1
+        }
+      ],
+      "total": 299,
+      "name": "Muhammed Shemin",
+      "mobile": "9072999456",
+      "address": "KUTHIRAPARAMBIL HOUSE MARAVANCHERY MALAPPURAM",
+      "payment": "Credit / Debit Card",
+      "date": "28/10/2025, 4:02:29 pm",
+      "createdAt": "2025-10-28T10:32:29.504Z"
+    },
+    {
+      "id": "1761662373954",
+      "userId": "sfuc",
+      "items": [
+        {
+          "id": "24",
+          "team": "Barcelona",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "price": 410,
+          "category": "Special Edition",
+          "image": "https://dukaan.b-cdn.net/700x700/webp/media/18399f38-f157-4150-8abc-0640feda2eb4.png",
+          "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/985a2a88-61a7-493f-896e-66f5675e7422.png",
+          "description": "Official Barcelona Special Edition Jersey .",
+          "quantity": 1
+        },
+        {
+          "id": "27",
+          "team": "Intermilan",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "price": 450,
+          "category": "Special Edition",
+          "image": "https://dukaan.b-cdn.net/700x700/webp/media/bd73319d-6461-41d2-8d64-b29847902a69.png",
+          "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/abbd63b1-50ee-48ae-9a3e-7fb399ef49c5.png",
+          "description": "Official Inter Milan Special Edition Jersey.",
+          "quantity": 1
+        }
+      ],
+      "total": 910,
+      "subtotal": 860,
+      "deliveryFee": 50,
+      "name": "shemun",
+      "mobile": "9854546788",
+      "address": "wvjknrevhieruvhreiho",
+      "payment": "UPI",
+      "date": "28/10/2025, 8:09:33 pm",
+      "createdAt": "2025-10-28T14:39:33.966Z"
+    },
+    {
+      "id": "1761724246001",
+      "userId": "hksz",
+      "items": [
+        {
+          "id": "2",
+          "team": "Real Madrid",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "price": 299,
+          "category": "Home",
+          "image": "https://dukaan.b-cdn.net/700x700/webp/media/58a48494-680e-4bcf-9759-812314ac26df.png",
+          "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/00a43591-0c0a-412d-805e-18c0633bf517.png",
+          "description": "Official Real Madrid home jersey 2025 edition.",
+          "quantity": 1,
+          "size": "M"
+        },
+        {
+          "id": "3",
+          "team": "Napoli",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "price": 299,
+          "category": "Home",
+          "image": "https://dukaan.b-cdn.net/700x700/webp/media/3369da95-939f-4fc2-b3e3-4d3325c6c0cc.png",
+          "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/7d79b55f-48d8-4da7-9a4f-b0055a58882e.png",
+          "description": "Official Napoli home jersey 2025 edition.",
+          "quantity": 1,
+          "size": "S"
+        },
+        {
+          "id": "3",
+          "team": "Napoli",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "price": 299,
+          "category": "Home",
+          "image": "https://dukaan.b-cdn.net/700x700/webp/media/3369da95-939f-4fc2-b3e3-4d3325c6c0cc.png",
+          "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/7d79b55f-48d8-4da7-9a4f-b0055a58882e.png",
+          "description": "Official Napoli home jersey 2025 edition.",
+          "quantity": 1,
+          "size": "XL"
+        }
+      ],
+      "total": 947,
+      "subtotal": 897,
+      "deliveryFee": 50,
+      "name": "esrtdyfughiop",
+      "mobile": "1234567890",
+      "address": "drftgyjhujiko",
+      "payment": "Credit / Debit Card",
+      "date": "29/10/2025, 13:20:46",
+      "createdAt": "2025-10-29T07:50:46.061Z"
+    },
+    {
+      "id": "1761728881040",
+      "userId": "ruaa",
+      "products": [
+        {
+          "id": "31",
+          "team": "Argentina",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "price": 530,
+          "category": "Special Edition",
+          "image": "https://dukaan.b-cdn.net/700x700/webp/media/29919060-4646-44ed-9516-c604b79bade2.png",
+          "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/da95cf89-931f-4442-8f92-7bf73c1a0f13.png",
+          "description": "Official Argentina Special Edition Jersey.",
+          "quantity": 3,
+          "size": "S"
+        },
+        {
+          "id": "27",
+          "team": "Intermilan",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "price": 450,
+          "category": "Special Edition",
+          "image": "https://dukaan.b-cdn.net/700x700/webp/media/bd73319d-6461-41d2-8d64-b29847902a69.png",
+          "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/abbd63b1-50ee-48ae-9a3e-7fb399ef49c5.png",
+          "description": "Official Inter Milan Special Edition Jersey.",
+          "quantity": 1
+        },
+        {
+          "id": "27",
+          "team": "Intermilan",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "price": 450,
+          "category": "Special Edition",
+          "image": "https://dukaan.b-cdn.net/700x700/webp/media/bd73319d-6461-41d2-8d64-b29847902a69.png",
+          "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/abbd63b1-50ee-48ae-9a3e-7fb399ef49c5.png",
+          "description": "Official Inter Milan Special Edition Jersey.",
+          "quantity": 1,
+          "size": "L"
+        }
+      ],
+      "total": 2490,
+      "name": "jumana p",
+      "phone": "1234567891",
+      "address": "asdfghj, edavanna - 12345",
+      "payment": "UPI",
+      "date": "29/10/2025, 14:38:01",
+      "createdAt": "2025-10-29T09:08:01.041Z"
+    }
+  ],
+  "products": [
+    {
+      "id": "1",
+      "team": "Miami",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 299,
+      "category": "Home",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/1a9dd58e-d683-4569-b4ff-5c016658a7c4.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/91e0d1fd-2d10-4ba8-84bc-c17df04fe2f0.png",
+      "description": "Official Miami Heat home jersey 2025 edition."
+    },
+    {
+      "id": "2",
+      "team": "Real Madrid",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 299,
+      "category": "Home",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/58a48494-680e-4bcf-9759-812314ac26df.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/00a43591-0c0a-412d-805e-18c0633bf517.png",
+      "description": "Official Real Madrid home jersey 2025 edition."
+    },
+    {
+      "id": "3",
+      "team": "Napoli",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 299,
+      "category": "Home",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/3369da95-939f-4fc2-b3e3-4d3325c6c0cc.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/7d79b55f-48d8-4da7-9a4f-b0055a58882e.png",
+      "description": "Official Napoli home jersey 2025 edition."
+    },
+    {
+      "id": "4",
+      "team": " Barcelona",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 300,
+      "category": "Home",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/d0ea6646-9893-4faf-9d8b-398b93c80cc1.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/542946fe-c4e3-41fb-b34b-da0261af25ce.png",
+      "description": "Official Barcelona Heat home jersey 2025 edition."
+    },
+    {
+      "id": "5",
+      "team": "Manchester United",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 300,
+      "category": "Home",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/e3f5e2d0-80b1-4b0a-8bb3-d45c8ffaf40c.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/e6ce34d0-7305-40b1-b61b-bf0a5afa9a06.png",
+      "description": "Official Machester United home jersey 2025 edition."
+    },
+    {
+      "id": "6",
+      "team": "Arsenal",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 320,
+      "category": "Home",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/8767e8f2-0cee-4589-bc6b-5a96b3d2d2b5.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/e9d987f1-9ebe-410e-b455-7db7e4386e62.png",
+      "description": "Official Arsenal home jersey 2025 edition."
+    },
+    {
+      "id": "7",
+      "team": "Bayern ",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 300,
+      "category": "Home",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/aba03aa5-40d7-4a7a-8299-050e6db2c78a.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/c7538ae3-7ebb-47c0-8546-eb03367ad044.png",
+      "description": "Official Bayern Munich home jersey 2025 edition."
+    },
+    {
+      "id": "8",
+      "team": "Machester City",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 320,
+      "category": "Home",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/f76f7a0e-f8eb-41f1-952d-aa69193469d5.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/f76f7a0e-f8eb-41f1-952d-aa69193469d5.png",
+      "description": "Official Machster City home jersey 2025 edition."
+    },
+    {
+      "id": "9",
+      "team": "Totenham",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 250,
+      "category": "Home",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/971b04b6-5760-4360-b977-c5de6f42397e.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/cf1fba33-8916-4b30-9295-95029e3a2b79.png",
+      "description": "Official Totenham home jersey 2025 edition."
+    },
+    {
+      "id": "10",
+      "team": "Liverpool ",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 280,
+      "category": "Home",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/a21e0d86-fc35-47cf-b3eb-4a0bb4c50dd2.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/2ba22a0c-bc7e-46f6-85c3-65ec4613cfff.png",
+      "description": "Official Liverpool home jersey 2025 edition."
+    },
+    {
+      "id": "11",
+      "team": "Psg",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 299,
+      "category": "Home",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/25bc269b-5622-4b87-8901-43c5fc73abdd.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/db7ba792-4031-44f6-9a18-5a012ce708e8.png",
+      "description": "Official Psg home jersey 2025 edition."
+    },
+    {
+      "id": "12",
+      "team": "Miami",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 250,
+      "category": "Away",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/82f5def3-e10c-425c-8ad3-640a8c5120be.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/f804b8f1-7b28-4876-9165-9022ea768f28.png",
+      "description": "Official Inter Miami Away jersey 2025 edition."
+    },
+    {
+      "id": "13",
+      "team": "Real Madrid",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 290,
+      "category": "Away",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/27fbb719-ea71-4edc-b0c4-79f4816b9dd6.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/1f0f72d5-e2b1-4d7a-9542-7d21fd9fd898.png",
+      "description": "Official Real Madrid Away jersey 2025 edition."
+    },
+    {
+      "id": "14",
+      "team": "Napoli",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 260,
+      "category": "Away",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/86e175fd-ad7f-470f-85ea-094465ae1479.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/c03e990c-7eb8-4d1c-83e2-f88ce2e0bdfc.png",
+      "description": "Official Napoli Away jersey 2025 edition."
+    },
+    {
+      "id": "15",
+      "team": " Barcelona",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 260,
+      "category": "Away",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/aac01075-75f6-495f-8ed7-3b6d78174603.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/7a699755-2929-4045-b4f2-2d882024adbb.png",
+      "description": "Official Barcelona Away jersey 2025 edition."
+    },
+    {
+      "id": "16",
+      "team": "Manchester United",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 270,
+      "category": "Away",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/41367f79-c558-487d-add4-277237ec6c31.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/5b122783-cc82-409a-82ee-484d09db3a55.png",
+      "description": "Official Machester United Away jersey 2025 edition."
+    },
+    {
+      "id": "17",
+      "team": "Arsenal",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 290,
+      "category": "Away",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/6fe8f549-ae8e-4b0a-a973-84665a5d3ac2.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/e2fb3a52-5a44-4ec4-a4d1-cc6541d80047.png",
+      "description": "Official Arsenal Away jersey 2025 edition."
+    },
+    {
+      "id": "18",
+      "team": "Bayern ",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 240,
+      "category": "Away",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/368de851-57d1-4a13-b92e-6f8e65084db0.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/dc334f26-b5c1-4898-98c6-689335955cc2.png",
+      "description": "Official Bayern Munich Away jersey 2025 edition."
+    },
+    {
+      "id": "19",
+      "team": "Machester City",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 230,
+      "category": "Away",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/b5ea7d46-6bed-4df7-99f3-5078310a9399.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/ab1faf68-1ce6-4e86-bdbb-b11f833bd190.png",
+      "description": "Official Machester City Away jersey 2025 edition."
+    },
+    {
+      "id": "20",
+      "team": "Totenham",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 299,
+      "category": "Away",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/f1402f59-bd30-4376-bb19-97e4c6e4fc89.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/bce0f798-8bb7-43de-b22a-ccc661bbb6b7.png",
+      "description": "Official Totenham Away jersey 2025 edition."
+    },
+    {
+      "id": "21",
+      "team": "Liverpool ",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 300,
+      "category": "Away",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/4a17f4e1-7d31-423b-bc0f-aeb0be100af2.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/db5bf2bb-12d5-48bd-8d80-c12b05bc3942.png",
+      "description": "Official Liverpool Away jersey 2025 edition."
+    },
+    {
+      "id": "22",
+      "team": "Psg",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 299,
+      "category": "Away",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/13c173e7-4d39-4340-9cba-39c1c72a80b8.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/a20f2c54-c0d6-4f05-a7e7-cf0c1779d690.png",
+      "description": "Official Psg Away jersey 2025 edition."
+    },
+    {
+      "id": "23",
+      "team": "Real madrid",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 460,
+      "category": "Special Edition",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/77fda83e-58cf-4e24-8275-970086dae904.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/17cbc748-4b71-4f45-b107-87929a9581f7.png",
+      "description": "Official Real Madrid Special Edition Jersey ."
+    },
+    {
+      "id": "24",
+      "team": "Barcelona",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 410,
+      "category": "Special Edition",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/18399f38-f157-4150-8abc-0640feda2eb4.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/985a2a88-61a7-493f-896e-66f5675e7422.png",
+      "description": "Official Barcelona Special Edition Jersey ."
+    },
+    {
+      "id": "25",
+      "team": "Machester United",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 399,
+      "category": "Special Edition",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/f3f8f78c-dd5d-4166-a1ee-3069ab78a34c.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/698584da-48f2-4fce-a680-15b7523e5edb.png",
+      "description": "Official Machester United Special Edition Jersey."
+    },
+    {
+      "id": "26",
+      "team": " Santos",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 399,
+      "category": "Special Edition",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/e0dc4ca2-8152-4d35-982a-5b8278afe588.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/20741bc7-7e3b-4a92-ab0e-780c857d4a54.png",
+      "description": "Official Santos Special Edition Jersey."
+    },
+    {
+      "id": "27",
+      "team": "Intermilan",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 450,
+      "category": "Special Edition",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/bd73319d-6461-41d2-8d64-b29847902a69.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/abbd63b1-50ee-48ae-9a3e-7fb399ef49c5.png",
+      "description": "Official Inter Milan Special Edition Jersey."
+    },
+    {
+      "id": "28",
+      "team": "Liverpool",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 499,
+      "category": "Special Edition",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/22228fa2-ca74-4008-8c8b-eadc6f593c43.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/9e3942cf-4f35-4840-9fcc-3f9040a8598a.png",
+      "description": "Official Liverpool Special Edition Jersey."
+    },
+    {
+      "id": "29",
+      "team": "England ",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 500,
+      "category": "Special Edition",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/2427a83a-4fc0-4be7-b890-fbbc32218e76.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/2f788757-aff6-492f-87ff-97866474b0c2.png",
+      "description": "Official England Special Edition Jersey."
+    },
+    {
+      "id": "30",
+      "team": "Germany",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 520,
+      "category": "Special Edition",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/7100d870-a4c7-4982-b567-8fbee76402f3.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/d4ef5c80-81f0-4d8e-bcd8-55626a41b70c.png",
+      "description": "Official Germany Special Edition Jersey."
+    },
+    {
+      "id": "31",
+      "team": "Argentina",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 530,
+      "category": "Special Edition",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/29919060-4646-44ed-9516-c604b79bade2.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/da95cf89-931f-4442-8f92-7bf73c1a0f13.png",
+      "description": "Official Argentina Special Edition Jersey."
+    },
+    {
+      "id": "32",
+      "team": "Ac milan ",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 550,
+      "category": "Special Edition",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/18d8562e-ad31-46d2-aacf-fe0f5d3dd59a.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/7c282939-8731-46ac-b5dc-2cbb1898fb0f.png",
+      "description": "Official Ac Milan Special Edition Jersey."
+    },
+    {
+      "id": "33",
+      "team": "Psg",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "price": 500,
+      "category": "Special Edition",
+      "image": "https://dukaan.b-cdn.net/700x700/webp/media/8c565895-28b0-450f-996f-317c0fac8dba.png",
+      "backImage": "https://dukaan.b-cdn.net/700x700/webp/media/2fa25a6e-a833-4bfd-841a-51b9ee93d8a4.png",
+      "description": "Official Psg Special Edition Jersey."
+    }
+  ]
+}
