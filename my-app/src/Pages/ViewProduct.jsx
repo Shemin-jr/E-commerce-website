@@ -1,10 +1,11 @@
+
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
-import "swiper/css/pagination";
+import "swiper/css/pagination"; 
 
 function ViewProduct() {
   const { id } = useParams();
@@ -14,7 +15,7 @@ function ViewProduct() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/products/${id}`)
+      .get(`http://localhost:5000/products/${id}`) 
       .then((res) => setProduct(res.data))
       .catch((err) => console.error(err));
   }, [id]);
@@ -24,7 +25,7 @@ function ViewProduct() {
   const images = [product.image];
   if (product.backImage) images.push(product.backImage);
 
-  // ✅ Helper: Check login
+  
   const getLoggedInUser = () => {
     const user =
       JSON.parse(localStorage.getItem("user")) ||
@@ -32,6 +33,7 @@ function ViewProduct() {
     return user;
   };
 
+  
   const handleAddToCart = async () => {
     const user = getLoggedInUser();
     if (!user) {
@@ -59,7 +61,9 @@ function ViewProduct() {
     localStorage.setItem("cart", JSON.stringify(cartLocal));
 
     try {
-      const res = await axios.get(`http://localhost:5000/carts?userId=${user.id}`);
+      const res = await axios.get(
+        `http://localhost:5000/carts?userId=${user.id}`
+      );
       const items = cartLocal;
       if (res.data && res.data.length > 0) {
         const cartRecord = res.data[0];
@@ -71,18 +75,18 @@ function ViewProduct() {
         await axios.post(`http://localhost:5000/carts`, {
           userId: user.id,
           items,
-          updatedAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),  
         });
       }
     } catch (err) {
       console.error("Failed to persist cart:", err);
     }
 
-    // ✅ Trigger cart icon update on Navbar (no navigation)
+    
     window.dispatchEvent(new Event("cartUpdated"));
-    alert("✅ Added to cart!");
   };
 
+  
   const handleBuyNow = () => {
     const user = getLoggedInUser();
     if (!user) {
@@ -103,7 +107,7 @@ function ViewProduct() {
 
   return (
     <div className="max-w-7xl mx-auto py-12 px-6 flex flex-col lg:flex-row gap-12">
-      {/* Image Slider */}
+   
       <div className="flex-1 flex justify-center">
         <div className="w-full max-w-[600px]">
           <Swiper
@@ -125,19 +129,25 @@ function ViewProduct() {
         </div>
       </div>
 
-      {/* Product Details */}
+     
       <div className="flex-1 space-y-6">
         <h1 className="text-4xl font-bold text-gray-900">{product.team}</h1>
-        <p className="text-2xl text-gray-700 font-semibold">₹ {product.price}</p>
+        <p className="text-2xl text-gray-700 font-semibold">
+          ₹ {product.price}
+        </p>
 
         {product.description && (
-          <p className="text-gray-600 leading-relaxed">{product.description}</p>
+          <p className="text-gray-600 leading-relaxed">
+            {product.description}
+          </p>
         )}
 
-        {/* Size Selection */}
+        
         {product.sizes && product.sizes.length > 0 && (
           <div className="mt-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-3">Select Size:</h3>
+            <h3 className="text-lg font-semibold text-gray-800 mb-3">
+              Select Size:
+            </h3>
             <div className="flex gap-3 flex-wrap">
               {product.sizes.map((size) => (
                 <button
@@ -156,6 +166,7 @@ function ViewProduct() {
           </div>
         )}
 
+     
         <div className="flex gap-4 mt-8">
           <button
             onClick={handleAddToCart}

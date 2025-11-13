@@ -46,7 +46,7 @@ function Home() {
 </h1>
 
         <p className="mt-4 text-lg md:text-2xl text-gray-200 max-w-2xl">
-          At Jerseyfy, football meets fashion. Explore exclusive collections inspired by the world’s greatest players.
+          At Jersey_Vault, football meets fashion. Explore exclusive collections inspired by the world’s greatest players.
         </p>
 
         <div className="mt-8 flex flex-col md:flex-row gap-4">
@@ -60,7 +60,7 @@ function Home() {
         </div>
       </div>
 
-      {/* Background indicator dots */}
+    
       <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
         {backgrounds.map((_, index) => (
           <div

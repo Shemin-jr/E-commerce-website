@@ -14,7 +14,7 @@ function Navbar() {
 
   const navItems = ["Home", "Products"];
 
-  // ✅ Load user session
+ 
   const loadUser = useCallback(() => {
     const savedUser =
       JSON.parse(localStorage.getItem("user")) ||
@@ -22,7 +22,7 @@ function Navbar() {
     setUser(savedUser);
   }, []);
 
-  // ✅ Update cart & wishlist counts
+  
   const updateCounts = useCallback(async () => {
     const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
     setWishlistCount(wishlist.length);
@@ -45,7 +45,7 @@ function Navbar() {
 
           const serverItems = latestCart.items || [];
 
-          // Prefer local cart if it's newer
+          
           if (localCart.length > serverItems.length) {
             await axios.patch(`http://localhost:5000/carts/${latestCart.id}`, {
               items: localCart,
@@ -78,12 +78,13 @@ function Navbar() {
     }
   }, []);
 
-  // ✅ Add event listeners for updates
+  
   useEffect(() => {
     loadUser();
     updateCounts();
 
     const refreshAll = () => {
+      
       loadUser();
       updateCounts();
     };
@@ -101,7 +102,7 @@ function Navbar() {
     };
   }, [loadUser, updateCounts]);
 
-  // ✅ Handle Logout (clear everything)
+  
   const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("currentUser");
@@ -121,7 +122,7 @@ function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 bg-[#1a1a40] text-white p-4 flex justify-between items-center shadow-lg">
-      {/* Logo */}
+      
       <Link
         to="/"
         className="text-2xl md:text-3xl font-extrabold uppercase text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-white to-blue-400 drop-shadow-lg hover:scale-105 transition-transform duration-300"
@@ -129,7 +130,7 @@ function Navbar() {
         Jerseyfy
       </Link>
 
-      {/* Desktop Menu */}
+      
       <ul className="hidden md:flex space-x-6 items-center">
         {navItems.map((item) => (
           <li key={item}>
@@ -142,7 +143,7 @@ function Navbar() {
           </li>
         ))}
 
-        {/* Wishlist */}
+       
         <li className="relative">
           <Link
             to="/wishlist"
@@ -158,7 +159,7 @@ function Navbar() {
           </Link>
         </li>
 
-        {/* Cart */}
+       
         <li className="relative">
           <Link
             to="/cart"
@@ -174,7 +175,7 @@ function Navbar() {
           </Link>
         </li>
 
-        {/* Orders */}
+        
         <li>
           <Link
             to="/orders"
@@ -184,7 +185,7 @@ function Navbar() {
           </Link>
         </li>
 
-        {/* Auth Section */}
+       
         {user ? (
           <>
             <li className="text-yellow-300 font-semibold">
@@ -211,7 +212,7 @@ function Navbar() {
         )}
       </ul>
 
-      {/* Mobile Menu Button */}
+     
       <div
         className="md:hidden cursor-pointer z-50"
         onClick={() => setMenuOpen(!menuOpen)}
@@ -219,7 +220,7 @@ function Navbar() {
         {menuOpen ? <FaTimes size={25} /> : <FaBars size={25} />}
       </div>
 
-      {/* Mobile Menu */}
+      
       <ul
         className={`md:hidden absolute top-full left-0 w-full bg-[#1a1a40] text-center flex flex-col space-y-4 py-4 transition-all duration-300 overflow-hidden ${
           menuOpen ? "max-h-96" : "max-h-0"

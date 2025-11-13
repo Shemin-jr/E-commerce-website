@@ -1,0 +1,29 @@
+{
+  "users": [
+    {
+      "id": "16b4",
+      "name": "athif",
+      "number": "45784692",
+      "email": "Athif@gmail.com",
+      "password": "A@thif001",
+      "blocked": false
+    }
+  ],
+  "admins": [
+    {
+      "id": "admin1",
+      "name": "Admin",
+      "email": "admin@gmail.com",
+      "password": "admin123",
+      "role": "admin"
+    }
+  ],
+  "carts": [
+    {
+      "id": "ae3f",
+      "userId": "ae3f",
+      "items": [],
+      "updatedAt": "2025-10-28T08:07:15.743Z"
+    }
+  ]
+}

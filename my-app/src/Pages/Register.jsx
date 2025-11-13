@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
-import Wishlist from "./Wishlist";
+import Wishlist from "./Wishlist";   
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -14,15 +14,15 @@ function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
 
-  // Handle input change
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle form submit
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { name, email, password, confirmPassword } = formData;
@@ -38,18 +38,18 @@ function Register() {
     }
 
     try {
-      // Check if email already exists
+      
       const res = await axios.get(`http://localhost:5000/users?email=${email}`);
       if (res.data.length > 0) {
         alert("Email already registered!");
         return;
       }
 
-      // Generate a unique ID
+      
       const generateId = () => Math.random().toString(36).substr(2, 4);
       const newUserId = generateId();
 
-      // Create new user
+      
       await axios.post("http://localhost:5000/users", {
         id: newUserId,
         name,
@@ -58,7 +58,7 @@ function Register() {
         createdAt: new Date().toISOString()
       });
 
-      // Create empty cart for the new user
+      
       await axios.post("http://localhost:5000/carts", {
         id: newUserId,
         userId: newUserId,
@@ -83,7 +83,7 @@ function Register() {
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Full Name */}
+          
           <input
             type="text"
             name="name"
@@ -93,7 +93,7 @@ function Register() {
             className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
-          {/* Email */}
+         
           <input
             type="email"
             name="email"
@@ -103,7 +103,7 @@ function Register() {
             className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
-          {/* Password */}
+         
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
@@ -121,7 +121,7 @@ function Register() {
             </span>
           </div>
 
-          {/* Confirm Password */}
+          
           <div className="relative">
             <input
               type={showConfirm ? "text" : "password"}
@@ -139,7 +139,7 @@ function Register() {
             </span>
           </div>
 
-          {/* Submit Button */}
+         
           <button
             type="submit"
             className="w-full bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700 transition-colors"

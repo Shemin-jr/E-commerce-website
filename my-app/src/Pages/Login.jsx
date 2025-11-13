@@ -12,32 +12,50 @@ function Login() {
     e.preventDefault();
 
     try {
-      // Check if user exists in db.json (JSON Server)
-      const res = await axios.get(
-        `http://localhost:5000/users?email=${encodeURIComponent(
-          email
-        )}&password=${encodeURIComponent(password)}`
+      // First try admin login
+      const adminRes = await axios.get(`http://localhost:5000/admins?email=${encodeURIComponent(email)}`);
+      
+      if (adminRes.data && adminRes.data.length > 0) {
+        const admin = adminRes.data[0];
+        if (admin.password === password) {
+          // Admin login successful
+          localStorage.setItem("isAdmin", "true");
+          localStorage.setItem("adminData", JSON.stringify(admin));
+          setEmail("");
+          setPassword("");
+          navigate("/admin/dashboard");
+          return;
+        }
+      }
+
+      // If not admin, try user login
+      const userRes = await axios.get(
+        `http://localhost:5000/users?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
       );
 
-      if (res.data && res.data.length === 1) {
-        const user = res.data[0];
+      if (userRes.data && userRes.data.length === 1) {
+        const user = userRes.data[0];
+        
+        // Check if user is blocked
+        if (user.blocked) {
+          alert("Your account has been blocked. Please contact support.");
+          return;
+        }
 
-        // ✅ Store user in localStorage (both keys to support existing code)
         const userData = { id: user.id, name: user.name, email: user.email };
         localStorage.setItem("user", JSON.stringify(userData));
         localStorage.setItem("currentUser", JSON.stringify(userData));
 
-        // ✅ Trigger Navbar update
         window.dispatchEvent(new Event("userLoggedIn"));
-          setEmail("");
+        setEmail("");
         setPassword("");
-        // ✅ Navigate to home
+        
         navigate("/");
       } else {
         alert("Invalid email or password. Please try again.");
       }
     } catch (error) {
-      console.error("Login error:", error);
+      console.error("Login error:", error);    
       const serverMessage =
         error?.response?.data || error?.message || "Unknown error";
       alert(`Login failed: ${serverMessage}`);
@@ -52,7 +70,7 @@ function Login() {
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Email Input */}
+          
           <div>
             <label
               htmlFor="email"
@@ -71,7 +89,7 @@ function Login() {
             />
           </div>
 
-          {/* Password Input */}
+        
           <div>
             <label
               htmlFor="password"
@@ -90,7 +108,6 @@ function Login() {
             />
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700 transition-colors font-bold py-3 rounded-lg shadow-md text-white"
@@ -99,7 +116,7 @@ function Login() {
           </button>
         </form>
 
-        {/* Register Link */}
+        
         <p className="text-center text-gray-400 mt-6">
           Don’t have an account?{" "}
           <span

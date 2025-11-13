@@ -1,3 +1,5 @@
+
+
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -6,7 +8,7 @@ function Checkout() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // 🟢 Determine checkout products
+ 
   let selectedProducts = [];
   if (location.state?.products) selectedProducts = location.state.products;
   else if (location.state?.product) selectedProducts = [location.state.product];
@@ -16,12 +18,13 @@ function Checkout() {
       JSON.parse(localStorage.getItem("checkoutItems")) ||
       [];
   }
+
   selectedProducts = selectedProducts.map((it) => ({
     ...it,
     quantity: it.quantity || 1,
   }));
 
-  // 🟢 Form states
+  
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
@@ -30,7 +33,31 @@ function Checkout() {
   const [payment, setPayment] = useState("Credit / Debit Card");
   const [loading, setLoading] = useState(false);
 
-  // 🟢 Place order
+  
+  const clearCartCompletely = async (user) => {
+    try {
+      localStorage.removeItem("cart");
+      localStorage.removeItem("selectedItems");
+      localStorage.removeItem("checkoutItems");
+
+      if (user?.id) {
+        const res = await axios.get(`http://localhost:5000/carts?userId=${user.id}`);
+        if (res.data.length > 0) {
+          await axios.patch(`http://localhost:5000/carts/${res.data[0].id}`, {
+            items: [],
+            updatedAt: new Date().toISOString(),
+          });
+        }
+      }
+
+      
+      window.dispatchEvent(new Event("cartUpdated"));
+    } catch (err) {
+      console.error("Cart clearing failed:", err);
+    }
+  };
+
+  
   const handleOrderNow = async () => {
     if (selectedProducts.length === 0) return alert("No products to order!");
     if (!name || !phone || !address || !city || !zip)
@@ -47,38 +74,39 @@ function Checkout() {
         0
       );
 
+      
       const order = {
         id: Date.now().toString(),
         userId: user?.id || null,
-        products: selectedProducts,
+        items: selectedProducts, 
         total,
         name,
         phone,
         address: `${address}, ${city} - ${zip}`,
-        payment,
-        date: new Date().toLocaleString(),
-        createdAt: new Date().toISOString(),
+        payment, // 
+        date: new Date().toISOString(), 
+        status: "Pending",
       };
 
+     
       try {
         await axios.post("http://localhost:5000/orders", order);
-      } catch {
+      } catch (err) {
+        console.warn("Server save failed, saving locally:", err);
         const existing = JSON.parse(localStorage.getItem("orders")) || [];
         existing.push(order);
         localStorage.setItem("orders", JSON.stringify(existing));
       }
 
-      localStorage.removeItem("cart");
-      localStorage.removeItem("selectedItems");
-      localStorage.removeItem("checkoutItems");
-      window.dispatchEvent(new Event("cartUpdated"));
+      await clearCartCompletely(user);
+
+      
       navigate("/orders", { state: { order } });
     } finally {
       setLoading(false);
     }
   };
 
-  // 🧾 Layout
   return (
     <div className="max-w-6xl mx-auto py-12 px-6">
       <h1 className="text-4xl font-bold mb-10 text-center text-gray-900">
@@ -97,7 +125,7 @@ function Checkout() {
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* 🏷️ Left Side - Shipping & Payment */}
+        
           <div className="bg-white rounded-2xl shadow-md p-6">
             <h2 className="text-2xl font-semibold mb-4 text-gray-900">
               Shipping Details
@@ -148,7 +176,7 @@ function Checkout() {
               <option>UPI</option>
             </select>
 
-            {/* 🟩 Order Total + Button */}
+            
             <div className="mt-8 border-t pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="text-sm text-gray-600">Order Total</p>
@@ -176,7 +204,7 @@ function Checkout() {
             </div>
           </div>
 
-          {/* 🛍️ Right Side - Product Summary */}
+         
           <div className="bg-white rounded-2xl shadow-md p-6">
             <h2 className="text-2xl font-semibold mb-4 text-gray-900">
               Order Summary

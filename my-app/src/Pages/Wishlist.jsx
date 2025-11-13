@@ -1,12 +1,11 @@
 
-
 import React, { useEffect, useState } from "react";
 
 function Wishlist() {
   const [wishlist, setWishlist] = useState([]);
   const [selectedSizes, setSelectedSizes] = useState({});
 
-  // Helper to parse price values that might be strings like "₹ 299" -> 299
+  
   const parsePrice = (p) => {
     if (typeof p === "number") return p;
     if (typeof p === "string") {
@@ -17,13 +16,26 @@ function Wishlist() {
     return 0;
   };
 
-  // ✅ Load wishlist from localStorage on mount
-  useEffect(() => {
+  
+  const loadWishlist = () => {
     const savedWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
     setWishlist(savedWishlist);
+  };
+
+  useEffect(() => {
+    loadWishlist();
+
+    
+    const handleWishlistChange = () => loadWishlist();
+
+    window.addEventListener("wishlistUpdated", handleWishlistChange);
+
+    return () => {
+      window.removeEventListener("wishlistUpdated", handleWishlistChange);
+    };
   }, []);
 
-  // ✅ Remove item from wishlist
+  
   const removeFromWishlist = (id) => {
     const updatedWishlist = wishlist.filter((item) => item.id !== id);
     setWishlist(updatedWishlist);
@@ -31,12 +43,12 @@ function Wishlist() {
     window.dispatchEvent(new Event("wishlistUpdated"));
   };
 
-  // ✅ Handle size selection
+  
   const handleSizeSelect = (id, size) => {
     setSelectedSizes((prev) => ({ ...prev, [id]: size }));
   };
 
-  // ✅ Add item to cart with selected size
+  
   const addToCart = (item) => {
     const selectedSize = selectedSizes[item.id];
     if (!selectedSize) {
@@ -54,14 +66,22 @@ function Wishlist() {
       return;
     }
 
-    const newCartItem = { ...item, size: selectedSize, quantity: 1, price: parsePrice(item.price) };
+    const newCartItem = {
+      ...item,
+      size: selectedSize,
+      quantity: 1,
+      price: parsePrice(item.price),
+    };
+
     const updatedCart = [...cart, newCartItem];
     localStorage.setItem("cart", JSON.stringify(updatedCart));
+
+   
     window.dispatchEvent(new Event("cartUpdated"));
-    alert(`✅ Added ${item.team || item.name} (${selectedSize}) to cart!`);
+    removeFromWishlist(item.id); 
   };
 
-  // ✅ Show message when wishlist is empty
+  
   if (!wishlist || wishlist.length === 0) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 text-gray-700">
@@ -76,23 +96,30 @@ function Wishlist() {
     );
   }
 
-  // ✅ Wishlist UI
+  
   return (
     <div className="min-h-screen bg-gray-50 py-16 px-6 md:px-20">
       <h2 className="text-3xl font-bold text-center mb-10 text-pink-600">
-        ❤️ Your Wishlist
+        
       </h2>
 
-      {/* Total amount */}
+      
       <div className="max-w-4xl mx-auto mb-6 flex justify-end">
         <div className="bg-white px-4 py-2 rounded-lg shadow-sm">
           <span className="text-sm text-gray-600">Total:</span>
           <div className="text-xl font-bold text-green-600">
-            ₹ {wishlist.reduce((s, it) => s + parsePrice(it.price) * (it.quantity || 1), 0).toFixed(2)}
+            ₹{" "}
+            {wishlist
+              .reduce(
+                (s, it) => s + parsePrice(it.price) * (it.quantity || 1),
+                0
+              )
+              .toFixed(2)}
           </div>
         </div>
       </div>
 
+      
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
         {wishlist.map((item) => (
           <div
@@ -116,7 +143,7 @@ function Wishlist() {
                 ₹{item.price || "0.00"}
               </p>
 
-              {/* ✅ Size selection */}
+              
               <div className="mb-4">
                 <p className="font-semibold text-gray-700 mb-2">Select Size:</p>
                 <div className="flex justify-center space-x-2">
@@ -136,7 +163,7 @@ function Wishlist() {
                 </div>
               </div>
 
-              {/* ✅ Add to Cart */}
+              
               <button
                 onClick={() => addToCart(item)}
                 className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg mr-2 transition"
@@ -144,7 +171,7 @@ function Wishlist() {
                 Add to Cart
               </button>
 
-              {/* ❌ Remove from Wishlist */}
+            
               <button
                 onClick={() => removeFromWishlist(item.id)}
                 className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition"
