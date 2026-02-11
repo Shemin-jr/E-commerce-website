@@ -1,0 +1,275 @@
+import React, { useEffect, useState, useCallback, useRef } from "react";
+import API from "../api/api";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
+// Simple debounce function without lodash
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
+function Products() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [wishlist, setWishlist] = useState(() => {
+    const saved = localStorage.getItem("wishlist");
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  // Search & Filter State
+  const [searchTerm, setSearchTerm] = useState(localStorage.getItem("searchTerm") || "");
+  const [category, setCategory] = useState(localStorage.getItem("category") || "All");
+  const [sortOrder, setSortOrder] = useState(localStorage.getItem("sortOrder") || "none");
+
+  // Pagination (Client-side pagination for now, or backend if API returns paged data)
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 11;
+
+  const navigate = useNavigate();
+
+  // ===============================
+  // Fetch Products from Backend
+  // ===============================
+  const fetchProducts = async (search, cat, sort) => {
+    setLoading(true);
+    try {
+      const params = {};
+      if (search) params.search = search;
+      if (cat && cat !== "All") params.category = cat;
+
+      if (sort === "lowToHigh") params.sort = "price_low";
+      if (sort === "highToLow") params.sort = "price_high";
+
+      console.log('🔍 Fetching products with params:', params);
+      const res = await API.get("/products", { params });
+      console.log('✅ Products fetched:', res.data.length);
+      setProducts(res.data);
+      setCurrentPage(1); // Reset to first page on new filter
+    } catch (err) {
+      console.error('❌ Error:', err);
+      toast.error("Failed to load products");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Create debounced function using useRef to persist it across renders
+  const debouncedFetchRef = useRef(
+    debounce((s, c, o) => fetchProducts(s, c, o), 500)
+  );
+
+  // Trigger fetch when filters change
+  useEffect(() => {
+    // Persist to local storage
+    localStorage.setItem("searchTerm", searchTerm);
+    localStorage.setItem("category", category);
+    localStorage.setItem("sortOrder", sortOrder);
+
+    // Call API
+    debouncedFetchRef.current(searchTerm, category, sortOrder);
+  }, [searchTerm, category, sortOrder]);
+
+
+  // Wishlist Effect
+  useEffect(() => {
+    localStorage.setItem("wishlist", JSON.stringify(wishlist));
+    window.dispatchEvent(new Event("wishlistUpdated"));
+  }, [wishlist]);
+
+  // ===============================
+  // Pagination Logic (Client-side view of fetched results)
+  // ===============================
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+  const totalPages = Math.ceil(products.length / productsPerPage);
+
+
+  // ===============================
+  // Handlers
+  // ===============================
+  const toggleWishlist = (product) => {
+    const productId = product._id || product.id;
+    const exists = wishlist.some((w) => (w._id || w.id) === productId);
+    if (exists) {
+      setWishlist(wishlist.filter((w) => (w._id || w.id) !== productId));
+      toast.info("Removed from wishlist");
+    } else {
+      setWishlist([...wishlist, product]);
+      toast.success("Added to wishlist!");
+    }
+  };
+
+  const handleAddToCart = async (product) => {
+    const productId = product._id || product.id;
+    const size = "";
+    const cartLocal = JSON.parse(localStorage.getItem("cart")) || [];
+    const existingItem = cartLocal.find(
+      (item) => (item._id || item.id) === productId && item.size === size
+    );
+
+    if (existingItem) {
+      existingItem.quantity = (existingItem.quantity || 1) + 1;
+    } else {
+      cartLocal.push({ ...product, quantity: 1, size });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cartLocal));
+
+    try {
+      const storedUser = JSON.parse(localStorage.getItem("user")) || JSON.parse(localStorage.getItem("currentUser"));
+      if (storedUser) {
+        const userId = storedUser._id || storedUser.id;
+        await API.patch(`/cart/${userId}`, {
+          items: cartLocal,
+          updatedAt: new Date().toISOString(),
+        });
+      }
+    } catch (err) {
+      console.error("Failed to sync cart", err);
+    }
+    toast.success(`${product.team} added to cart!`);
+    window.dispatchEvent(new Event("cartUpdated"));
+  };
+
+  if (loading && products.length === 0) {
+    return (
+      <div className="min-h-screen flex justify-center items-center text-green-600 font-bold text-2xl">
+        Loading products...
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-gray-50 min-h-screen py-16 px-6 md:px-20">
+
+      {/* Filter Bar */}
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-10">
+        <input
+          type="text"
+          placeholder="Search by team..."
+          className="w-full md:w-1/3 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <select
+          className="w-full md:w-1/4 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          <option value="All">All Categories</option>
+          <option value="home">Home Kit</option>
+          <option value="away">Away Kit</option>
+          <option value="special edition">Special Edition</option>
+        </select>
+        <select
+          className="w-full md:w-1/4 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value)}
+        >
+          <option value="none">Sort by</option>
+          <option value="lowToHigh">Price: Low → High</option>
+          <option value="highToLow">Price: High → Low</option>
+        </select>
+      </div>
+
+
+      {/* Product Grid */}
+      {products.length === 0 && !loading ? (
+        <div className="text-center text-gray-500 text-xl mt-10">No products found.</div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+          {currentProducts.map((item) => {
+            const productId = item._id || item.id;
+            const isInWishlist = wishlist.some((w) => (w._id || w.id) === productId);
+
+            return (
+              <div
+                key={productId}
+                className="relative bg-white rounded-2xl shadow-lg overflow-hidden hover:scale-105 hover:shadow-2xl transition-all duration-300"
+              >
+                <div
+                  onClick={() => toggleWishlist(item)}
+                  className="absolute top-3 right-3 text-2xl cursor-pointer z-10"
+                >
+                  {isInWishlist ? (
+                    <FaHeart className="text-red-600" />
+                  ) : (
+                    <FaRegHeart className="text-gray-400 hover:text-red-600" />
+                  )}
+                </div>
+
+                <img
+                  src={item.image}
+                  alt={item.team}
+                  className="w-full h-80 object-cover cursor-pointer"
+                  onClick={() => navigate(`/product/${productId}`)}
+                />
+
+                <div className="p-6 text-center">
+                  <h3 className="text-2xl font-bold text-gray-800 mb-2">{item.team}</h3>
+                  <p className="text-gray-600 mb-1">Category: {item.category}</p>
+                  <p className="text-green-600 font-semibold text-lg mb-4">₹ {item.price?.toFixed(2)}</p>
+
+                  <div className="flex justify-center">
+                    <button
+                      onClick={() => handleAddToCart(item)}
+                      className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg font-semibold shadow-md transition-transform hover:scale-105"
+                    >
+                      Add to Cart
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex justify-center mt-10 gap-3">
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-300"
+            disabled={currentPage === 1}
+          >
+            Prev
+          </button>
+
+          {Array.from({ length: totalPages }, (_, idx) => (
+            <button
+              key={idx + 1}
+              onClick={() => setCurrentPage(idx + 1)}
+              className={`px-4 py-2 rounded-lg ${currentPage === idx + 1
+                ? "bg-green-700 text-white"
+                : "bg-green-200 text-green-800 hover:bg-green-400"
+                }`}
+            >
+              {idx + 1}
+            </button>
+          ))}
+
+          <button
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300"
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default Products;
