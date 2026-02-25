@@ -13,17 +13,28 @@ const userSchema = new mongoose.Schema(
                 quantity: { type: Number, default: 1 },
                 size: { type: String },
                 sizes: [String],
-                // Store full details for snapshot if needed, or rely on populate
                 team: String,
                 price: Number,
                 image: String,
                 category: String
+
+
+
             }
         ],
         wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
+        offers: [
+            {
+                title: { type: String, required: true },
+                discountPercent: { type: Number, required: true },
+                expiresAt: { type: Date },
+                active: { type: Boolean, default: true },
+                createdAt: { type: Date, default: Date.now }
+            }
+        ],
     },
     { timestamps: true }
 );
 
-const User = mongoose.model("User", userSchema); 
+const User = mongoose.model("User", userSchema);
 export default User;

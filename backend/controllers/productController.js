@@ -2,7 +2,7 @@ import Product from "../models/Product.js";
 
 export const getProducts = async (req, res) => {
     try {
-        const { search, category, minPrice, maxPrice, sort } = req.query;
+        const { search, category, minPrice, maxPrice, sort, page = 1, limit = 10 } = req.query;
         let query = {};
 
         // --- Search Logic ---
@@ -42,8 +42,33 @@ export const getProducts = async (req, res) => {
             sortOptions = { name: -1 };
         }
 
-        const products = await Product.find(query).sort(sortOptions);
-        res.json(products);
+        // --- Pagination Logic ---
+        const isAll = req.query.all === 'true';
+        let products;
+        let totalProducts = await Product.countDocuments(query);
+        let totalPages = 1;
+        let currentPageResult = 1;
+
+        if (isAll) {
+            products = await Product.find(query).sort(sortOptions);
+            totalPages = 1;
+            currentPageResult = 1;
+        } else {
+            const skip = (Number(page) - 1) * Number(limit);
+            products = await Product.find(query)
+                .sort(sortOptions)
+                .skip(skip)
+                .limit(Number(limit));
+            totalPages = Math.ceil(totalProducts / Number(limit));
+            currentPageResult = Number(page);
+        }
+
+        res.json({
+            products,
+            totalProducts,
+            totalPages,
+            currentPage: currentPageResult
+        });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -144,4 +169,5 @@ export const deleteProduct = async (req, res) => {
 //         res.status(500).json({ message: error.message });
 //     }
 // };
+
 

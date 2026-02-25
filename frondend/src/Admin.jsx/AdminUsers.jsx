@@ -8,6 +8,9 @@ export default function AdminUsers() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedUser, setSelectedUser] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [limit] = useState(7);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,12 +20,14 @@ export default function AdminUsers() {
       return;
     }
     fetchUsers();
-  }, [navigate]);
+  }, [navigate, currentPage, searchTerm]);
 
   const fetchUsers = async () => {
     try {
-      const response = await API.get('/auth/users');
-      setUsers(response.data);
+      setLoading(true);
+      const response = await API.get(`/auth/users?page=${currentPage}&limit=${limit}&search=${searchTerm}`);
+      setUsers(response.data.users);
+      setTotalPages(response.data.totalPages);
       setLoading(false);
     } catch (err) {
       console.error('Error fetching users:', err);
@@ -34,7 +39,7 @@ export default function AdminUsers() {
   const handleBlockUser = async (userId, currentStatus) => {
     try {
       await API.patch(`/auth/users/${userId}`, {
-        blocked: !currentStatus
+        blocked: !currentStatus 
       });
       toast.success(currentStatus ? 'User unblocked' : 'User blocked');
       fetchUsers();
@@ -57,10 +62,10 @@ export default function AdminUsers() {
     }
   };
 
-  const filteredUsers = users.filter(user =>
-    user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset to first page on new search
+  };
 
   if (loading) return <div className="text-center p-8 text-blue-600 font-bold animate-pulse">Loading Users...</div>;
 
@@ -75,7 +80,7 @@ export default function AdminUsers() {
             placeholder="Search users by name or email..."
             className="w-full p-4 bg-white border border-gray-300 rounded-2xl pl-12 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 shadow-md"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleSearchChange}
           />
           <span className="absolute left-4 top-4 text-xl text-gray-400 opacity-50 group-focus-within:opacity-100 transition-opacity">🔍</span>
         </div>
@@ -92,7 +97,7 @@ export default function AdminUsers() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {filteredUsers.map((user) => (
+              {users.map((user) => (
                 <tr key={user._id || user.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-800">
                     {user.name}
@@ -130,6 +135,35 @@ export default function AdminUsers() {
               ))}
             </tbody>
           </table>
+
+          {/* Pagination Controls */}
+          <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex items-center justify-between">
+            <div className="text-sm text-gray-700">
+              Showing page <span className="font-semibold">{currentPage}</span> of <span className="font-semibold">{totalPages}</span>
+            </div>
+            <div className="flex space-x-2">
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className={`px-4 py-2 border rounded-lg text-sm font-medium transition-colors ${currentPage === 1
+                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  : 'bg-white text-gray-700 hover:bg-gray-50'
+                  }`}
+              >
+                Previous
+              </button>
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className={`px-4 py-2 border rounded-lg text-sm font-medium transition-colors ${currentPage === totalPages
+                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  : 'bg-white text-gray-700 hover:bg-gray-50'
+                  }`}
+              >
+                Next
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -175,6 +209,7 @@ export default function AdminUsers() {
               onClick={() => setSelectedUser(null)}
               className="mt-8 w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-2xl transition-all duration-300 font-bold shadow-md"
             >
+
               Close
             </button>
           </div>

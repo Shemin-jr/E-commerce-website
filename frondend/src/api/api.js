@@ -14,7 +14,7 @@ API.interceptors.request.use((config) => {
         const finalToken = (token && token !== "undefined") ? token : (storedUser && storedUser.token);
 
         if (finalToken && finalToken !== "undefined") {
-            config.headers.Authorization = `Bearer ${finalToken}`;
+            config.headers.Authorization = `Bearer ${finalToken}`;  
         }
     } catch (err) {
         console.error("Auth interceptor error:", err);

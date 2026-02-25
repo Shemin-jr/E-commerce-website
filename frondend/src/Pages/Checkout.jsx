@@ -81,6 +81,8 @@ function Checkout() {
     return Object.keys(tempErrors).length === 0;
   };
 
+
+
   const handleOrderNow = async () => {
     if (selectedProducts.length === 0) {
       toast.error("No products to order!");
@@ -94,21 +96,22 @@ function Checkout() {
         JSON.parse(localStorage.getItem("user")) ||
         JSON.parse(localStorage.getItem("currentUser"));
 
-      const total = selectedProducts.reduce(
+      const subtotal = selectedProducts.reduce(
         (sum, it) => sum + (it.price || 0) * (it.quantity || 1),
         0
       );
+      const finalTotal = subtotal;
 
 
       const order = {
         userId: user?._id || user?.id || null,
         items: selectedProducts,
-        total,
+        total: finalTotal,
         name,
         email,
         phone,
         address: `${address}, ${city} - ${zip}`,
-        payment, // 
+        payment,
         date: new Date().toISOString(),
         status: "Pending",
       };
@@ -117,21 +120,28 @@ function Checkout() {
       try {
         await API.post("/orders", order);
         toast.success("Order placed successfully!");
+        await clearCartCompletely(user);
+        navigate("/orders");
       } catch (err) {
-        console.warn("Server save failed, saving locally:", err);
-        const serverMessage = err.response?.data?.message || " something went wrong";
-
-        const existing = JSON.parse(localStorage.getItem("orders")) || [];
-        existing.push(order);
-        localStorage.setItem("orders", JSON.stringify(existing));
+        console.error("Server save failed:", err);
+        const serverMessage = err.response?.data?.message || err.message || "Something went wrong while placing order";
         toast.error(serverMessage);
+
+        // Optionally save locally if you want offline support, but don't clear cart or navigate
+        const existing = JSON.parse(localStorage.getItem("orders")) || [];
+        existing.push({ ...order, offline: true });
+        localStorage.setItem("orders", JSON.stringify(existing));
       }
-      await clearCartCompletely(user);
-      navigate("/orders", { state: { order } });
     } finally {
       setLoading(false);
     }
   };
+
+  const subtotal = selectedProducts.reduce(
+    (sum, it) => sum + (it.price || 0) * (it.quantity || 1),
+    0
+  );
+  const finalTotal = subtotal;
 
   return (
     <div className="max-w-6xl mx-auto py-12 px-6">
@@ -310,6 +320,13 @@ function Checkout() {
                   </p>
                 </div>
               ))}
+            </div>
+
+            <div className="border-t pt-4 space-y-3">
+              <div className="flex justify-between text-lg font-bold text-gray-900 pt-2">
+                <span>Total Amount</span>
+                <span>₹ {finalTotal.toFixed(2)}</span>
+              </div>
             </div>
           </div>
         </div>

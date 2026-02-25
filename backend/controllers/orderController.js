@@ -5,7 +5,11 @@ export const createOrder = async (req, res) => {
   try {
     const { userId, items, total, name, email, address, payment, phone } = req.body;
 
+    console.log("Creating Order for:", name, "Email:", email);
+    console.log("Items received:", items?.length || 0);
+
     if (!name || !email || !address || !phone || !items || items.length === 0) {
+      console.log("Validation Failed: Missing required fields");
       return res.status(400).json({ message: "Shipping details, email, and items are required" });
     }
 
@@ -19,19 +23,27 @@ export const createOrder = async (req, res) => {
       return res.status(400).json({ message: "Phone number must be exactly 10 digits" });
     }
 
-    const mappedItems = items.map(item => ({
-      product: (item._id || item.id) && mongoose.Types.ObjectId.isValid(item._id || item.id) ? (item._id || item.id) : null,
-      team: item.team || item.name || "Unknown Item",
-      price: Number(item.price) || 0,
-      quantity: Number(item.quantity) || 1,
-      size: item.size || "N/A",
-      image: item.image
-    }));
+    const mappedItems = items.map(item => {
+      const id = item._id || item.id || item.productId;
+      return {
+        product: id && mongoose.Types.ObjectId.isValid(id) ? id : null,
+        team: item.team || item.name || "Unknown Item",
+        price: Number(item.price) || 0,
+        quantity: Number(item.quantity) || 1,
+        size: item.size || "N/A",
+        image: item.image || item.img || (item.product && item.product.image)
+      };
+    });
 
     const validTotal = Number(total) || mappedItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
 
+    // Prioritize req.user.id if available (though typically this route is not protected)
+    const orderUser = (req.user && req.user.id) ? req.user.id : (userId && mongoose.Types.ObjectId.isValid(userId) ? userId : null);
+
+    console.log("Order User ID:", orderUser);
+
     const order = new Order({
-      user: (req.user && req.user.id) ? req.user.id : (userId && mongoose.Types.ObjectId.isValid(userId) ? userId : null),
+      user: orderUser,
       items: mappedItems,
       total: validTotal,
       name,
@@ -39,10 +51,11 @@ export const createOrder = async (req, res) => {
       address,
       phone,
       paymentMethod: payment || req.body.paymentMethod || "COD",
-      status: "Pending" // Match model enum
+      status: "Pending"
     });
 
     const savedOrder = await order.save();
+    console.log("Order Saved Successfully:", savedOrder._id);
     res.status(201).json(savedOrder);
   } catch (error) {
     console.error("Create Order Error:", error);
@@ -99,8 +112,40 @@ export const getUserOrders = async (req, res) => {
 
 export const getAllOrders = async (req, res) => {
   try {
-    const orders = await Order.find({}).populate("user", "name email");
-    res.json(orders);
+    const { page = 1, limit = 10, status } = req.query;
+    const isAll = req.query.all === 'true';
+
+    let query = {};
+    if (status && status !== 'all') {
+      query.status = { $regex: new RegExp(`^${status}$`, 'i') };
+    }
+
+    let orders;
+    let totalOrders = await Order.countDocuments(query);
+    let totalPages = 1;
+    let currentPageResult = 1;
+
+    if (isAll) {
+      orders = await Order.find(query)
+        .populate("user", "name email")
+        .sort({ createdAt: -1 });
+    } else {
+      const skip = (Number(page) - 1) * Number(limit);
+      orders = await Order.find(query)
+        .populate("user", "name email")
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(Number(limit));
+      totalPages = Math.ceil(totalOrders / Number(limit));
+      currentPageResult = Number(page);
+    }
+
+    res.json({
+      orders,
+      totalOrders,
+      totalPages,
+      currentPage: currentPageResult
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

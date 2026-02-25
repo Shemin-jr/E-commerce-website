@@ -30,19 +30,23 @@ function Products() {
   const [category, setCategory] = useState(localStorage.getItem("category") || "All");
   const [sortOrder, setSortOrder] = useState(localStorage.getItem("sortOrder") || "none");
 
-  // Pagination (Client-side pagination for now, or backend if API returns paged data)
+  // Pagination (Server-side pagination)
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 11;
+  const [totalPages, setTotalPages] = useState(1);
+  const productsPerPage = 12; // Adjusted to match limit if needed
 
   const navigate = useNavigate();
 
   // ===============================
   // Fetch Products from Backend
   // ===============================
-  const fetchProducts = async (search, cat, sort) => {
+  const fetchProducts = async (search, cat, sort, page = 1) => {
     setLoading(true);
     try {
-      const params = {};
+      const params = {
+        page,
+        limit: productsPerPage
+      };
       if (search) params.search = search;
       if (cat && cat !== "All") params.category = cat;
 
@@ -51,9 +55,11 @@ function Products() {
 
       console.log('🔍 Fetching products with params:', params);
       const res = await API.get("/products", { params });
-      console.log('✅ Products fetched:', res.data.length);
-      setProducts(res.data);
-      setCurrentPage(1); // Reset to first page on new filter
+      console.log('✅ Products fetched:', res.data.products.length);
+
+      setProducts(res.data.products);
+      setTotalPages(res.data.totalPages);
+      setCurrentPage(res.data.currentPage);
     } catch (err) {
       console.error('❌ Error:', err);
       toast.error("Failed to load products");
@@ -64,7 +70,7 @@ function Products() {
 
   // Create debounced function using useRef to persist it across renders
   const debouncedFetchRef = useRef(
-    debounce((s, c, o) => fetchProducts(s, c, o), 500)
+    debounce((s, c, o, p) => fetchProducts(s, c, o, p), 500)
   );
 
   // Trigger fetch when filters change
@@ -74,9 +80,13 @@ function Products() {
     localStorage.setItem("category", category);
     localStorage.setItem("sortOrder", sortOrder);
 
-    // Call API
-    debouncedFetchRef.current(searchTerm, category, sortOrder);
+    // Call API (reset to page 1 when filters change)
+    debouncedFetchRef.current(searchTerm, category, sortOrder, 1);
   }, [searchTerm, category, sortOrder]);
+
+  const handlePageChange = (newPage) => {
+    fetchProducts(searchTerm, category, sortOrder, newPage);
+  };
 
 
   // Wishlist Effect
@@ -85,13 +95,7 @@ function Products() {
     window.dispatchEvent(new Event("wishlistUpdated"));
   }, [wishlist]);
 
-  // ===============================
-  // Pagination Logic (Client-side view of fetched results)
-  // ===============================
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
-  const totalPages = Math.ceil(products.length / productsPerPage);
+
 
 
   // ===============================
@@ -112,6 +116,11 @@ function Products() {
   const handleAddToCart = async (product) => {
     const productId = product._id || product.id;
     const size = "";
+
+    // Determine active price
+    const isActiveOffer = product.salePrice && new Date(product.offerExpiry) > new Date();
+    const finalPrice = isActiveOffer ? Number(product.salePrice) : Number(product.price);
+
     const cartLocal = JSON.parse(localStorage.getItem("cart")) || [];
     const existingItem = cartLocal.find(
       (item) => (item._id || item.id) === productId && item.size === size
@@ -119,8 +128,9 @@ function Products() {
 
     if (existingItem) {
       existingItem.quantity = (existingItem.quantity || 1) + 1;
+      existingItem.price = finalPrice; // Update price in case it changed
     } else {
-      cartLocal.push({ ...product, quantity: 1, size });
+      cartLocal.push({ ...product, price: finalPrice, quantity: 1, size });
     }
 
     localStorage.setItem("cart", JSON.stringify(cartLocal));
@@ -188,7 +198,7 @@ function Products() {
         <div className="text-center text-gray-500 text-xl mt-10">No products found.</div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-          {currentProducts.map((item) => {
+          {products.map((item) => {
             const productId = item._id || item.id;
             const isInWishlist = wishlist.some((w) => (w._id || w.id) === productId);
 
@@ -218,7 +228,17 @@ function Products() {
                 <div className="p-6 text-center">
                   <h3 className="text-2xl font-bold text-gray-800 mb-2">{item.team}</h3>
                   <p className="text-gray-600 mb-1">Category: {item.category}</p>
-                  <p className="text-green-600 font-semibold text-lg mb-4">₹ {item.price?.toFixed(2)}</p>
+                  <div className="mb-4">
+                    {item.salePrice && new Date(item.offerExpiry) > new Date() ? (
+                      <div className="flex flex-col items-center">
+                        <span className="text-gray-400 line-through text-sm">₹ {item.price?.toFixed(2)}</span>
+                        <span className="text-red-600 font-bold text-xl leading-none">₹ {Number(item.salePrice).toFixed(2)}</span>
+                        <span className="text-[10px] text-red-500 font-bold uppercase mt-1 animate-pulse">Limited Offer!</span>
+                      </div>
+                    ) : (
+                      <p className="text-green-600 font-semibold text-lg">₹ {item.price?.toFixed(2)}</p>
+                    )}
+                  </div>
 
                   <div className="flex justify-center">
                     <button
@@ -239,7 +259,7 @@ function Products() {
       {totalPages > 1 && (
         <div className="flex justify-center mt-10 gap-3">
           <button
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
             className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-300"
             disabled={currentPage === 1}
           >
@@ -249,7 +269,7 @@ function Products() {
           {Array.from({ length: totalPages }, (_, idx) => (
             <button
               key={idx + 1}
-              onClick={() => setCurrentPage(idx + 1)}
+              onClick={() => handlePageChange(idx + 1)}
               className={`px-4 py-2 rounded-lg ${currentPage === idx + 1
                 ? "bg-green-700 text-white"
                 : "bg-green-200 text-green-800 hover:bg-green-400"
@@ -260,7 +280,7 @@ function Products() {
           ))}
 
           <button
-            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))}
             className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300"
             disabled={currentPage === totalPages}
           >

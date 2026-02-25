@@ -10,6 +10,8 @@ const productSchema = new mongoose.Schema(
         description: { type: String },
         sizes: [String],
         quantity: { type: Number, default: 0 },
+        salePrice: { type: Number },
+        offerExpiry: { type: Date },
     },
     { timestamps: true }
 );

@@ -12,7 +12,7 @@ function Home() {
     "https://www.fcbarcelona.com/fcbarcelona/photo/2022/12/18/fc146e94-d4e6-4cdf-9405-80e3f7817f7d/1450108295.jpg",
      "https://wallpapercave.com/wp/wp9354262.jpg",
     "https://wallpapercave.com/wp/wp12565292.jpg",
-    
+
   ];
 
   const [current, setCurrent] = useState(0);

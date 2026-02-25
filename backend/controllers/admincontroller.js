@@ -3,9 +3,7 @@ import Product from "../../models/Product.js";
 import Order from "../../models/Order.js";
 
 
-// ==========================
-// 📊 DASHBOARD STATS
-// ==========================
+
 export const getDashboardStats = async (req, res) => {
   try {
     const totalUsers = await User.countDocuments();
@@ -21,7 +19,7 @@ export const getDashboardStats = async (req, res) => {
       totalUsers,
       totalProducts,
       totalOrders,
-      totalRevenue,
+      totalRevenue,  
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -29,9 +27,7 @@ export const getDashboardStats = async (req, res) => {
 };
 
 
-// ==========================
-// 👥 GET ALL USERS
-// ==========================
+
 export const getAllUsers = async (req, res) => {
   try {
     const users = await User.find().select("-password");
@@ -42,9 +38,8 @@ export const getAllUsers = async (req, res) => {
 };
 
 
-// ==========================
-// ❌ DELETE USER
-// ==========================
+
+
 export const deleteUser = async (req, res) => {
   try {
     await User.findByIdAndDelete(req.params.id);
@@ -55,9 +50,7 @@ export const deleteUser = async (req, res) => {
 };
 
 
-// ==========================
-// 📦 GET ALL ORDERS
-// ==========================
+
 export const getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find().populate("user", "name email");
@@ -68,9 +61,6 @@ export const getAllOrders = async (req, res) => {
 };
 
 
-// ==========================
-// 🔄 UPDATE ORDER STATUS
-// ==========================
 export const updateOrderStatus = async (req, res) => {
   try {
     const { status } = req.body;
@@ -83,7 +73,7 @@ export const updateOrderStatus = async (req, res) => {
       "Cancelled",
     ];
 
-    // ✅ Check valid status
+   
     if (!allowedStatuses.includes(status)) {
       return res.status(400).json({
         message: "Invalid status value",
@@ -98,24 +88,24 @@ export const updateOrderStatus = async (req, res) => {
       });
     }
 
-    // 🚫 Prevent changes after Delivered
+  
     if (order.status === "Delivered") {
       return res.status(400).json({
         message: "Order already delivered. Status cannot be changed.",
       });
     }
 
-    // 🚫 Prevent cancelling after Delivered
+    
     if (status === "Cancelled" && order.status === "Delivered") {
       return res.status(400).json({
         message: "Delivered orders cannot be cancelled.",
       });
     }
 
-    // ✅ Update status
+  
     order.status = status;
 
-    // 📦 If Delivered → update delivery fields
+  
     if (status === "Delivered") {
       order.isDelivered = true;
       order.deliveredAt = Date.now();
@@ -135,12 +125,6 @@ export const updateOrderStatus = async (req, res) => {
   }
 };
 
-
-
-
-// ==========================
-// ➕ CREATE PRODUCT
-// ==========================
 export const createProduct = async (req, res) => {
   try {
     const product = new Product(req.body);
@@ -149,12 +133,10 @@ export const createProduct = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-};
+}; 
 
 
-// ==========================
-// ❌ DELETE PRODUCT
-// ==========================
+
 export const deleteProduct = async (req, res) => {
   try {
     await Product.findByIdAndDelete(req.params.id);
@@ -163,3 +145,4 @@ export const deleteProduct = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+

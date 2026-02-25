@@ -136,11 +136,29 @@ import Navbar from "./Component/Navbar";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// Admin Protected Route
+// User Protected Route (Requires Login)
+function UserPrivateRoute({ children }) {
+  const token = localStorage.getItem("token");
+  return token ? children : <Navigate to="/login" replace />;
+}
+
+// Admin Protected Route (Requires Admin Role)
 function AdminPrivateRoute({ children }) {
-  const isAdmin = localStorage.getItem("isAdmin");
+  const isAdmin = localStorage.getItem("isAdmin") === "true";
   const adminData = localStorage.getItem("adminData");
   return isAdmin && adminData ? children : <Navigate to="/admin/login" replace />;
+}
+
+// Public Route (Accessible only when NOT logged in - for Login/Register)
+function PublicRoute({ children }) {
+  const token = localStorage.getItem("token");
+  const isAdmin = localStorage.getItem("isAdmin") === "true";
+
+  if (token) {
+    if (isAdmin) return <Navigate to="/admin/dashboard" replace />;
+    return <Navigate to="/" replace />;
+  }
+  return children;
 }
 
 function AppRouter() {
@@ -162,15 +180,17 @@ function AppRouter() {
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Products />} />
         <Route path="/product/:id" element={<ViewProduct />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/wishlist" element={<Wishlist />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/orders" element={<Orders />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
 
+        {/* User Protected Routes */}
+        <Route path="/cart" element={<UserPrivateRoute><Cart /></UserPrivateRoute>} />
+        <Route path="/wishlist" element={<UserPrivateRoute><Wishlist /></UserPrivateRoute>} />
+        <Route path="/checkout" element={<UserPrivateRoute><Checkout /></UserPrivateRoute>} />
+        <Route path="/orders" element={<UserPrivateRoute><Orders /></UserPrivateRoute>} />
 
-        <Route path="/admin/login" element={<AdminLogin />} />
+        {/* Public-Only Routes */}
+        <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+        <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
+        <Route path="/admin/login" element={<PublicRoute><AdminLogin /></PublicRoute>} />
 
         <Route
           path="/admin/dashboard"

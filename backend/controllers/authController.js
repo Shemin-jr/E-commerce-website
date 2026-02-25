@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { generateToken, generateRefreshToken } from "../config/jwt.js";
 
 export const register = async (req, res) => {
+    
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
@@ -78,9 +79,46 @@ export const login = async (req, res) => {
 };
 
 export const getUsers = async (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+    const search = req.query.search || "";
+
     try {
-        const users = await User.find({ role: "user" }).select("-password");
-        res.json(users);
+        const query = {
+            role: "user",
+            $or: [
+                { name: { $regex: search, $options: "i" } },
+                { email: { $regex: search, $options: "i" } }
+            ]
+        };
+
+        const isAll = req.query.all === 'true';
+        let users;
+        const totalUsers = await User.countDocuments(query);
+        let totalPages = 1;
+        let currentPageResult = 1;
+
+        if (isAll) {
+            users = await User.find(query)
+                .select("-password")
+                .sort({ createdAt: -1 });
+        } else {
+            users = await User.find(query)
+                .select("-password")
+                .sort({ createdAt: -1 })
+                .skip(skip)
+                .limit(limit);
+            totalPages = Math.ceil(totalUsers / limit);
+            currentPageResult = page;
+        }
+
+        res.json({
+            users,
+            currentPage: currentPageResult,
+            totalPages: totalPages,
+            totalUsers,
+        });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

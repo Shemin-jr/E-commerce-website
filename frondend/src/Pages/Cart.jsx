@@ -101,6 +101,7 @@ function Cart() {
   const removeItem = (id, size) => {
     updateCart(cart.filter((item) => !((item._id || item.id) === id && item.size === size)));
     setSelectedItems((prev) => prev.filter((s) => !((s._id || s.id) === id && s.size === size)));
+    toast.success("Product is removed");
   };
 
 

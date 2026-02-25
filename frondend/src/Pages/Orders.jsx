@@ -185,10 +185,13 @@ export default function Orders() {
 
   const fetchOrders = async () => {
     try {
+      setLoading(true);
       const res = await API.get("/orders/my");
       setOrders(res.data);
     } catch (error) {
-      toast.error("Failed to load orders");
+      console.error("Fetch orders error:", error);
+      const msg = error.response?.data?.message || "Failed to load orders";
+      toast.error(msg);
     } finally {
       setLoading(false);
     }

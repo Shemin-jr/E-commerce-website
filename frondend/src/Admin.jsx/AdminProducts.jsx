@@ -16,8 +16,15 @@ export default function AdminProducts() {
     category: 'Home',
     image: '',
     backImage: '',
-    description: ''
+    description: '',
+    salePrice: '',
+    offerExpiry: ''
   });
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalProducts, setTotalProducts] = useState(0);
+  const itemsPerPage = 8;
 
   const navigate = useNavigate();
 
@@ -27,13 +34,22 @@ export default function AdminProducts() {
       navigate('/admin/login');
       return;
     }
-    fetchProducts();
-  }, [navigate]);
+    fetchProducts(currentPage);
+  }, [navigate, currentPage]);
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (page = 1) => {
     try {
-      const response = await API.get('/products');
-      setProducts(response.data);
+      setLoading(true);
+      const response = await API.get('/products', {
+        params: {
+          page,
+          limit: itemsPerPage,
+          search: searchQuery
+        }
+      });
+      setProducts(response.data.products);
+      setTotalPages(response.data.totalPages);
+      setTotalProducts(response.data.totalProducts);
       setLoading(false);
     } catch (err) {
       console.error('Error fetching products:', err);
@@ -41,6 +57,18 @@ export default function AdminProducts() {
       setLoading(false);
     }
   };
+
+  // Effect to refetch when search query changes (debounced search could be better but let's stick to simple for now)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (currentPage === 1) {
+        fetchProducts(1);
+      } else {
+        setCurrentPage(1);
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -79,7 +107,9 @@ export default function AdminProducts() {
       category: product.category,
       image: product.image,
       backImage: product.backImage,
-      description: product.description
+      description: product.description,
+      salePrice: product.salePrice || '',
+      offerExpiry: product.offerExpiry || ''
     });
     setShowForm(true);
   };
@@ -125,7 +155,9 @@ export default function AdminProducts() {
                   category: 'Home',
                   image: '',
                   backImage: '',
-                  description: ''
+                  description: '',
+                  salePrice: '',
+                  offerExpiry: ''
                 });
                 setShowForm(!showForm);
               }}
@@ -205,6 +237,25 @@ export default function AdminProducts() {
                     required
                   />
                 </div>
+                <div>
+                  <label className="block text-sm font-bold text-gray-400 mb-2 tracking-wide uppercase">Sale Price (INR) - Optional</label>
+                  <input
+                    type="number"
+                    value={newProduct.salePrice}
+                    onChange={(e) => setNewProduct({ ...newProduct, salePrice: e.target.value })}
+                    className="w-full p-3 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition-all text-gray-800"
+                    placeholder="Discounted price"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-gray-400 mb-2 tracking-wide uppercase">Offer Expiry Date</label>
+                  <input
+                    type="date"
+                    value={newProduct.offerExpiry ? newProduct.offerExpiry.substring(0, 10) : ''}
+                    onChange={(e) => setNewProduct({ ...newProduct, offerExpiry: e.target.value })}
+                    className="w-full p-3 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition-all text-gray-800"
+                  />
+                </div>
               </div>
               <div className="flex gap-4 pt-4">
                 <button
@@ -242,61 +293,92 @@ export default function AdminProducts() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-800">
-              {products
-                .filter(product =>
-                  product.team.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                  product.category.toLowerCase().includes(searchQuery.toLowerCase())
-                )
-                .map((product) => (
-                  <tr key={product._id || product.id} className="hover:bg-gray-50 transition-colors group">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center gap-4">
-                        <img src={product.image} alt={product.team} className="h-12 w-12 object-contain rounded bg-gray-50 p-1 border border-gray-200" />
-                        <div>
-                          <div className="text-sm font-medium text-gray-900">{product.team}</div>
-                          <div className="text-sm text-gray-500">{product.description.substring(0, 30)}...</div>
-                        </div>
+              {products.map((product) => (
+                <tr key={product._id || product.id} className="hover:bg-gray-50 transition-colors group">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center gap-4">
+                      <img src={product.image} alt={product.team} className="h-12 w-12 object-contain rounded bg-gray-50 p-1 border border-gray-200" />
+                      <div>
+                        <div className="text-sm font-medium text-gray-900">{product.team}</div>
+                        <div className="text-sm text-gray-500">{product.description.substring(0, 30)}...</div>
                       </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">₹{product.price}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">₹{product.price}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
                       ${product.category === 'Home' ? 'bg-orange-100 text-orange-800' : 'bg-blue-100 text-blue-800'}`}>
-                        {product.category}
-                      </span>
-                    </td>
-                    <td className="px-6 py-6 whitespace-nowrap">
-                      <div className="flex gap-1">
-                        {product.sizes.map(size => (
-                          <span key={size} className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded border border-gray-200">
-                            {size}
-                          </span>
-                        ))}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <div className="flex space-x-4">
-                        <button
-                          onClick={() => handleEditProduct(product)}
-                          className="text-indigo-600 hover:text-indigo-900 transition-colors"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => handleDeleteProduct(product._id || product.id)}
-                          className="text-red-600 hover:text-red-900 transition-colors"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                      {product.category}
+                    </span>
+                  </td>
+                  <td className="px-6 py-6 whitespace-nowrap">
+                    <div className="flex gap-1">
+                      {product.sizes.map(size => (
+                        <span key={size} className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded border border-gray-200">
+                          {size}
+                        </span>
+                      ))}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <div className="flex space-x-4">
+                      <button
+                        onClick={() => handleEditProduct(product)}
+                        className="text-indigo-600 hover:text-indigo-900 transition-colors"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDeleteProduct(product._id || product.id)}
+                        className="text-red-600 hover:text-red-900 transition-colors"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
+
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center gap-4 mt-8 pb-8">
+            <button
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="px-4 py-2 bg-white border border-gray-300 rounded shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              Previous
+            </button>
+
+            <div className="flex gap-2">
+              {[...Array(totalPages)].map((_, i) => (
+                <button
+                  key={i + 1}
+                  onClick={() => setCurrentPage(i + 1)}
+                  className={`px-3 py-1 rounded text-sm font-medium transition-colors ${currentPage === i + 1
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+                    }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+            </div>
+
+            <button
+              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 bg-white border border-gray-300 rounded shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

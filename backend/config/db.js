@@ -13,7 +13,7 @@ const connectDB = async () => {
             serverSelectionTimeoutMS: 5000,
         });
         isConnected = true;
-        console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+        console.log(`✅ MongoDB Connected: ${conn.connection.host}`); 
     } catch (error) {
         isConnected = false;
         console.error(`❌ MongoDB Connection Error: ${error.message}`);

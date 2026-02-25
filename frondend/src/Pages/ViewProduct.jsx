@@ -13,11 +13,15 @@ function ViewProduct() {
   const [selectedSize, setSelectedSize] = useState("");
   const navigate = useNavigate();
 
-  useEffect(() => {
+  const fetchProduct = () => {
     API
       .get(`/products/${id}`)
       .then((res) => setProduct(res.data))
       .catch((err) => console.error(err));
+  };
+
+  useEffect(() => {
+    fetchProduct();
   }, [id]);
 
   if (!product) return <div className="text-center p-10">Loading...</div>;
@@ -48,6 +52,9 @@ function ViewProduct() {
     }
 
     const productId = product._id || product.id;
+    const isActiveOffer = product.salePrice && new Date(product.offerExpiry) > new Date();
+    const finalPrice = isActiveOffer ? Number(product.salePrice) : Number(product.price);
+
     const cartLocal = JSON.parse(localStorage.getItem("cart")) || [];
     const existing = cartLocal.find(
       (item) => (item._id || item.id) === productId && item.size === selectedSize
@@ -55,8 +62,9 @@ function ViewProduct() {
 
     if (existing) {
       existing.quantity = (existing.quantity || 1) + 1;
+      existing.price = finalPrice;
     } else {
-      cartLocal.push({ ...product, quantity: 1, size: selectedSize });
+      cartLocal.push({ ...product, price: finalPrice, quantity: 1, size: selectedSize });
     }
 
     localStorage.setItem("cart", JSON.stringify(cartLocal));
@@ -95,8 +103,11 @@ function ViewProduct() {
       return;
     }
 
+    const isActiveOffer = product.salePrice && new Date(product.offerExpiry) > new Date();
+    const finalPrice = isActiveOffer ? Number(product.salePrice) : Number(product.price);
+
     navigate("/checkout", {
-      state: { product: { ...product, quantity: 1, size: selectedSize } },
+      state: { products: [{ ...product, price: finalPrice, quantity: 1, size: selectedSize }] },
     });
   };
 
@@ -127,9 +138,18 @@ function ViewProduct() {
 
       <div className="flex-1 space-y-6">
         <h1 className="text-4xl font-bold text-gray-900">{product.team}</h1>
-        <p className="text-2xl text-gray-700 font-semibold">
-          ₹ {product.price}
-        </p>
+
+        <div>
+          {product.salePrice && new Date(product.offerExpiry) > new Date() ? (
+            <div className="flex items-center gap-3">
+              <span className="text-3xl text-red-600 font-bold">₹ {product.salePrice}</span>
+              <span className="text-xl text-gray-400 line-through">₹ {product.price}</span>
+              <span className="bg-red-100 text-red-600 text-xs px-2 py-1 rounded font-bold uppercase">Save ₹{product.price - product.salePrice}</span>
+            </div>
+          ) : (
+            <p className="text-3xl text-gray-700 font-bold">₹ {product.price}</p>
+          )}
+        </div>
 
         {product.description && (
           <p className="text-gray-600 leading-relaxed">

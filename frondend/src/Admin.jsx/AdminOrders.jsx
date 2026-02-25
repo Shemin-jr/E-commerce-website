@@ -9,6 +9,11 @@ export default function AdminOrders() {
   const [loading, setLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [filterStatus, setFilterStatus] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalOrders, setTotalOrders] = useState(0);
+  const itemsPerPage = 10;
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,20 +22,28 @@ export default function AdminOrders() {
       navigate('/admin/login');
       return;
     }
-    fetchData();
-  }, [navigate]);
+    fetchData(currentPage);
+  }, [navigate, currentPage, filterStatus]);
 
-  const fetchData = async () => {
+  const fetchData = async (page = 1) => {
     try {
+      setLoading(true);
       const [ordersRes, usersRes] = await Promise.all([
-        API.get("/orders"),
+        API.get("/orders", {
+          params: {
+            page,
+            limit: itemsPerPage,
+            status: filterStatus
+          }
+        }),
         API.get("/auth/users")
       ]);
 
       setUsers(usersRes.data);
 
+      const { orders: rawOrders, totalPages: pages, totalOrders: total } = ordersRes.data;
 
-      let cleanedOrders = ordersRes.data.filter(order => {
+      let cleanedOrders = (rawOrders || []).filter(order => {
         if (!order.items || order.items.length === 0) return false;
         const validItems = order.items.every(i => i.price && i.quantity);
         if (!validItems) return false;
@@ -38,7 +51,9 @@ export default function AdminOrders() {
         return true;
       });
 
-      setOrders(cleanedOrders.reverse());
+      setOrders(cleanedOrders);
+      setTotalPages(pages || 1);
+      setTotalOrders(total || 0);
       setLoading(false);
     } catch (error) {
       console.error("Fetch Data Error:", error);
@@ -112,9 +127,7 @@ export default function AdminOrders() {
     return order.email || order.user?.email || "N/A";
   };
 
-  const filteredOrders = orders.filter(order =>
-    filterStatus === 'all' ? true : (order.status || '').toLowerCase() === filterStatus.toLowerCase()
-  );
+
 
   const calculateTotal = (items) =>
     items?.reduce((total, item) => total + (item.price * (item.quantity || 1)), 0) || 0;
@@ -170,7 +183,7 @@ export default function AdminOrders() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredOrders.map(order => (
+              {orders.map(order => (
                 <tr key={order._id || order.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">#{order._id || order.id}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -202,6 +215,42 @@ export default function AdminOrders() {
             </tbody>
           </table>
         </div>
+
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center gap-4 mt-8 pb-8">
+            <button
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="px-4 py-2 bg-white border border-gray-300 rounded shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              Previous
+            </button>
+
+            <div className="flex gap-2">
+              {[...Array(totalPages)].map((_, i) => (
+                <button
+                  key={i + 1}
+                  onClick={() => setCurrentPage(i + 1)}
+                  className={`px-3 py-1 rounded text-sm font-medium transition-colors ${currentPage === i + 1
+                      ? 'bg-indigo-600 text-white shadow-md'
+                      : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+                    }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+            </div>
+
+            <button
+              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 bg-white border border-gray-300 rounded shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              Next
+            </button>
+          </div>
+        )}
 
 
         {selectedOrder && (

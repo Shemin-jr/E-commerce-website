@@ -48,13 +48,13 @@ export default function AdminDashboard() {
     try {
       const results = await Promise.allSettled([
         API.get("/auth/users"),
-        API.get("/orders"),
-        API.get("/products")
+        API.get("/orders?all=true"),
+        API.get("/products?all=true")
       ]);
 
       if (results[0].status === "fulfilled") setUsers(results[0].value.data || []);
-      if (results[1].status === "fulfilled") setOrders(results[1].value.data || []);
-      if (results[2].status === "fulfilled") setProducts(results[2].value.data || []);
+      if (results[1].status === "fulfilled") setOrders(results[1].value.data.orders || []);
+      if (results[2].status === "fulfilled") setProducts(results[2].value.data.products || []);
 
       // Log errors if any
       results.forEach((res, i) => {
