@@ -38,6 +38,46 @@ function Checkout() {
   const [payment, setPayment] = useState("Credit / Debit Card");
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [couponCode, setCouponCode] = useState("");
+  const [appliedOffer, setAppliedOffer] = useState(null);
+  const [discount, setDiscount] = useState(0);
+
+  const applyCoupon = async () => {
+    if (!couponCode.trim()) {
+      toast.error("Please enter a coupon code");
+      return;
+    }
+
+    try {
+      const subtotal = selectedProducts.reduce(
+        (sum, it) => sum + (it.price || 0) * (it.quantity || 1),
+        0
+      );
+
+      const productIds = selectedProducts.map(p => p._id || p.id);
+
+      const response = await API.post("/offers/apply", {
+        code: couponCode.trim(),
+        cartTotal: subtotal,
+        productIds
+      });
+
+      setAppliedOffer(response.data.offer);
+      setDiscount(response.data.discount);
+      toast.success("Coupon applied successfully!");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Invalid coupon code");
+      setAppliedOffer(null);
+      setDiscount(0);
+    }
+  };
+
+  const removeCoupon = () => {
+    setCouponCode("");
+    setAppliedOffer(null);
+    setDiscount(0);
+    toast.info("Coupon removed");
+  };
 
 
   const clearCartCompletely = async (user) => {
@@ -100,13 +140,23 @@ function Checkout() {
         (sum, it) => sum + (it.price || 0) * (it.quantity || 1),
         0
       );
-      const finalTotal = subtotal;
+      const finalTotal = subtotal - discount;
 
 
       const order = {
         userId: user?._id || user?.id || null,
         items: selectedProducts,
         total: finalTotal,
+        subtotal,
+        discount,
+        appliedOffer: appliedOffer ? {
+          _id: appliedOffer._id,
+          title: appliedOffer.title,
+          code: appliedOffer.code,
+          discountPercent: appliedOffer.discountPercent,
+          discountAmount: appliedOffer.discountAmount,
+          type: appliedOffer.type
+        } : null,
         name,
         email,
         phone,
@@ -266,14 +316,13 @@ function Checkout() {
               <div>
                 <p className="text-sm text-gray-600">Order Total</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  ₹
-                  {selectedProducts
-                    .reduce(
-                      (s, it) => s + (it.price || 0) * (it.quantity || 1),
-                      0
-                    )
-                    .toFixed(2)}
+                  ₹ {finalTotal.toFixed(2)}
                 </p>
+                {discount > 0 && (
+                  <p className="text-sm text-green-600">
+                    (₹ {discount.toFixed(2)} discount applied)
+                  </p>
+                )}
               </div>
               <button
                 onClick={handleOrderNow}
@@ -293,6 +342,45 @@ function Checkout() {
             <h2 className="text-2xl font-semibold mb-4 text-gray-900">
               Order Summary
             </h2>
+
+            {/* Coupon Code Section */}
+            <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+              <h3 className="text-lg font-medium mb-3 text-gray-900">Have a coupon?</h3>
+              {!appliedOffer ? (
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={couponCode}
+                    onChange={(e) => setCouponCode(e.target.value)}
+                    placeholder="Enter coupon code"
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  />
+                  <button
+                    onClick={applyCoupon}
+                    className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
+                  >
+                    Apply
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center justify-between bg-green-50 p-3 rounded-lg">
+                  <div>
+                    <p className="font-medium text-green-800">{appliedOffer.title}</p>
+                    <p className="text-sm text-green-600">
+                      {appliedOffer.type === "percentage"
+                        ? `${appliedOffer.discountPercent}% off`
+                        : `$${appliedOffer.discountAmount} off`}
+                    </p>
+                  </div>
+                  <button
+                    onClick={removeCoupon}
+                    className="text-red-600 hover:text-red-800 font-medium"
+                  >
+                    Remove
+                  </button>
+                </div>
+              )}
+            </div>
 
             <div className="space-y-4 max-h-[500px] overflow-y-auto">
               {selectedProducts.map((item, index) => (
@@ -323,7 +411,17 @@ function Checkout() {
             </div>
 
             <div className="border-t pt-4 space-y-3">
-              <div className="flex justify-between text-lg font-bold text-gray-900 pt-2">
+              <div className="flex justify-between text-gray-600">
+                <span>Subtotal</span>
+                <span>₹ {subtotal.toFixed(2)}</span>
+              </div>
+              {discount > 0 && (
+                <div className="flex justify-between text-green-600">
+                  <span>Discount ({appliedOffer?.title})</span>
+                  <span>-₹ {discount.toFixed(2)}</span>
+                </div>
+              )}
+              <div className="flex justify-between text-lg font-bold text-gray-900 pt-2 border-t">
                 <span>Total Amount</span>
                 <span>₹ {finalTotal.toFixed(2)}</span>
               </div>
