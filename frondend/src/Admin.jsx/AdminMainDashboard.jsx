@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-
 import API from "../api/api";
 import { toast } from "react-toastify";
 import {
@@ -16,7 +15,6 @@ import {
   Tooltip,
   CartesianGrid,
 } from "recharts";
-
 
 const formatCurrency = (n) =>
   new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(
@@ -35,9 +33,6 @@ const getAdminName = () => {
 };
 
 export default function AdminDashboard() {
-
-
-  // ✅ Logout and Navigate to Home
   const [users, setUsers] = useState([]);
   const [orders, setOrders] = useState([]);
   const [products, setProducts] = useState([]);
@@ -47,16 +42,15 @@ export default function AdminDashboard() {
     setLoading(true);
     try {
       const results = await Promise.allSettled([
-        API.get("/auth/users"),
+        API.get("/auth/users?all=true"),
         API.get("/orders?all=true"),
-        API.get("/products?all=true")
+        API.get("/products?all=true"),
       ]);
 
-      if (results[0].status === "fulfilled") setUsers(results[0].value.data || []);
+      if (results[0].status === "fulfilled") setUsers(results[0].value.data.users || []);
       if (results[1].status === "fulfilled") setOrders(results[1].value.data.orders || []);
       if (results[2].status === "fulfilled") setProducts(results[2].value.data.products || []);
 
-      // Log errors if any
       results.forEach((res, i) => {
         if (res.status === "rejected") {
           console.error(`API ${i} failed:`, res.reason);
@@ -64,7 +58,7 @@ export default function AdminDashboard() {
       });
     } catch (err) {
       console.error("Fetch all error:", err);
-      toast.error(" something went wrong");
+      toast.error("Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -76,7 +70,6 @@ export default function AdminDashboard() {
 
   const totals = useMemo(() => {
     const totalRevenue = orders.reduce((sum, order) => sum + (order.total || 0), 0);
-
     return {
       users: users.length,
       products: products.length,
@@ -129,38 +122,60 @@ export default function AdminDashboard() {
   }, [products]);
 
   if (loading)
-    return <div className="min-h-screen flex justify-center items-center text-xl text-blue-400 font-bold animate-pulse">Loading Dashboard...</div>;
+    return (
+      <div className="min-h-screen flex justify-center items-center text-xl text-indigo-400 font-bold animate-pulse bg-gray-950">
+        Loading Dashboard...
+      </div>
+    );
+
+  const statCards = [
+    { title: "Total Users", value: totals.users, icon: "👤", color: "from-indigo-600 to-indigo-400" },
+    { title: "Products", value: totals.products, icon: "📦", color: "from-emerald-600 to-emerald-400" },
+    { title: "Orders", value: totals.orders, icon: "🧾", color: "from-amber-600 to-amber-400" },
+    { title: "Revenue", value: formatCurrency(totals.revenue), icon: "💰", color: "from-purple-600 to-purple-400" },
+  ];
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-8">
-
-      {/* ✅ SINGLE LOGOUT BUTTON */}
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Welcome back, {getAdminName()} 👋</h1>
-
+        <div>
+          <p className="text-gray-500 text-sm font-medium uppercase tracking-widest mb-1">Admin Panel</p>
+          <h1 className="text-3xl font-bold text-white">Welcome back, {getAdminName()} 👋</h1>
+        </div>
       </div>
 
+      {/* Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard title="Total Users" value={totals.users} />
-        <StatCard title="Products" value={totals.products} />
-        <StatCard title="Orders" value={totals.orders} />
-        <StatCard title="Revenue" value={formatCurrency(totals.revenue)} />
+        {statCards.map((card) => (
+          <div
+            key={card.title}
+            className="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:scale-105 transition-all duration-300 hover:border-gray-700 shadow-xl"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <p className="text-sm text-gray-400 font-medium uppercase tracking-wider">{card.title}</p>
+              <span className={`w-10 h-10 rounded-xl bg-gradient-to-br ${card.color} flex items-center justify-center text-lg shadow-lg`}>
+                {card.icon}
+              </span>
+            </div>
+            <p className="text-3xl font-bold text-white">{card.value}</p>
+          </div>
+        ))}
       </div>
 
+      {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-
         <ChartCard title="Revenue (Last 7 Days)">
           <div className="w-full h-64">
             <ResponsiveContainer>
               <LineChart data={revenueByDay}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="day" stroke="#94a3b8" />
-                <YAxis stroke="#94a3b8" />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#1f2937" />
+                <XAxis dataKey="day" stroke="#6b7280" tick={{ fill: "#9ca3af" }} />
+                <YAxis stroke="#6b7280" tick={{ fill: "#9ca3af" }} />
                 <Tooltip
-                  contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '12px', color: '#000' }}
+                  contentStyle={{ backgroundColor: "#111827", border: "1px solid #374151", borderRadius: "12px", color: "#f9fafb" }}
                   formatter={(v) => formatCurrency(v)}
                 />
-                <Line type="monotone" dataKey="revenue" stroke="#6366F1" strokeWidth={4} dot={{ fill: '#6366F1', r: 6 }} activeDot={{ r: 8 }} />
+                <Line type="monotone" dataKey="revenue" stroke="#6366F1" strokeWidth={3} dot={{ fill: "#6366F1", r: 5 }} activeDot={{ r: 7 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -170,10 +185,10 @@ export default function AdminDashboard() {
           <div className="w-full h-64">
             <ResponsiveContainer>
               <BarChart data={ordersByDay}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="day" stroke="#94a3b8" />
-                <YAxis stroke="#94a3b8" />
-                <Tooltip contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '12px', color: '#000' }} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#1f2937" />
+                <XAxis dataKey="day" stroke="#6b7280" tick={{ fill: "#9ca3af" }} />
+                <YAxis stroke="#6b7280" tick={{ fill: "#9ca3af" }} />
+                <Tooltip contentStyle={{ backgroundColor: "#111827", border: "1px solid #374151", borderRadius: "12px", color: "#f9fafb" }} />
                 <Bar dataKey="count" fill="#22C55E" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
@@ -189,34 +204,21 @@ export default function AdminDashboard() {
                     <Cell key={i} fill={COLORS[i % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '12px', color: '#000' }} />
+                <Tooltip contentStyle={{ backgroundColor: "#111827", border: "1px solid #374151", borderRadius: "12px", color: "#f9fafb" }} />
               </PieChart>
             </ResponsiveContainer>
           </div>
         </ChartCard>
-
-
-
       </div>
-    </div>
-  );
-}
-
-function StatCard({ title, value }) {
-  return (
-    <div className="bg-white p-6 rounded-2xl shadow-md border border-gray-200 text-center hover:scale-105 transition-all duration-300">
-      <p className="text-sm text-gray-500 font-medium uppercase tracking-wider">{title}</p>
-      <p className="text-3xl font-bold mt-2 text-gray-900">{value}</p>
     </div>
   );
 }
 
 function ChartCard({ title, children }) {
   return (
-    <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-6">
-      <h3 className="font-semibold mb-4 text-gray-800">{title}</h3>
+    <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-xl hover:border-gray-700 transition-all">
+      <h3 className="font-semibold mb-4 text-gray-300">{title}</h3>
       {children}
     </div>
   );
 }
-
