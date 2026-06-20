@@ -1,39 +1,53 @@
 
 
 import React, { useState, useEffect, useCallback } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FaShoppingCart, FaBars, FaTimes, FaHeart, FaBox } from "react-icons/fa";
 import API from "../api/api";
+
+function readStorageJson(key, fallback = null) {
+  try {
+    const rawValue = localStorage.getItem(key);
+
+    if (!rawValue || rawValue === "undefined" || rawValue === "null") {
+      return fallback;
+    }
+
+    return JSON.parse(rawValue);
+  } catch (error) {
+    console.warn(`Skipping invalid localStorage value for ${key}`, error);
+    return fallback;
+  }
+}
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [wishlistCount, setWishlistCount] = useState(0);
   const [cartCount, setCartCount] = useState(0);
   const [user, setUser] = useState(null);
-  const navigate = useNavigate();
 
   const navItems = ["Home", "Products"];
 
 
   const loadUser = useCallback(() => {
     const savedUser =
-      JSON.parse(localStorage.getItem("user")) ||
-      JSON.parse(localStorage.getItem("currentUser"));
+      readStorageJson("user") ||
+      readStorageJson("currentUser");
     setUser(savedUser);
   }, []);
 
 
   const updateCounts = useCallback(async () => {
-    const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    const wishlist = readStorageJson("wishlist", []);
     setWishlistCount(wishlist.length);
 
     const storedUser =
-      JSON.parse(localStorage.getItem("user")) ||
-      JSON.parse(localStorage.getItem("currentUser"));
+      readStorageJson("user") ||
+      readStorageJson("currentUser");
 
     // Get local cart once
     const localCartRaw = localStorage.getItem("cart");
-    const localCart = localCartRaw ? JSON.parse(localCartRaw) : [];
+    const localCart = readStorageJson("cart", []);
 
     // Update count immediately for better UX
     setCartCount(localCart.length);
@@ -124,22 +138,25 @@ function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-[#1a1a40] text-white p-4 flex justify-between items-center shadow-lg">
+    <nav className="sticky top-0 z-50 flex items-center justify-between border-b border-sky-300/10 bg-[linear-gradient(90deg,rgba(7,18,35,0.94),rgba(12,24,43,0.88),rgba(7,18,35,0.94))] px-4 py-3 text-white shadow-[0_18px_50px_rgba(2,6,23,0.32)] backdrop-blur-xl">
 
       <Link
         to="/"
-        className="text-2xl md:text-3xl font-extrabold uppercase text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-white to-blue-400 drop-shadow-lg hover:scale-105 transition-transform duration-300"
+        className="flex items-center gap-2 transition-transform duration-300 hover:scale-[1.02]"
       >
-        Jerseyfy
+
+        <span className="text-xl font-black lowercase tracking-[0.06em] text-transparent bg-clip-text bg-gradient-to-r from-sky-200 via-white to-blue-400 drop-shadow-lg md:text-2xl">
+          Jersey_vault
+        </span>
       </Link>
 
 
-      <ul className="hidden md:flex space-x-6 items-center">
+      <ul className="hidden md:flex space-x-5 items-center">
         {navItems.map((item) => (
           <li key={item}>
             <Link
               to={item === "Home" ? "/" : `/${item.toLowerCase()}`}
-              className="hover:text-yellow-400 transition-colors duration-200"
+              className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-200 transition-colors duration-200 hover:text-sky-300"
             >
               {item}
             </Link>
@@ -150,12 +167,12 @@ function Navbar() {
         <li className="relative">
           <Link
             to="/wishlist"
-            className="hover:text-pink-500 flex items-center transition-colors duration-200"
+            className="flex items-center text-slate-200 transition-colors duration-200 hover:text-sky-300"
           >
             <FaHeart className="mr-1" />
 
             {wishlistCount > 0 && (
-              <span className="absolute -top-2 -right-3 bg-pink-500 text-white text-xs font-bold rounded-full px-1.5">
+              <span className="absolute -top-2 -right-3 rounded-full bg-cyan-400 px-1.5 text-xs font-bold text-slate-950">
                 {wishlistCount}
               </span>
             )}
@@ -166,12 +183,12 @@ function Navbar() {
         <li className="relative">
           <Link
             to="/cart"
-            className="hover:text-green-400 flex items-center transition-colors duration-200"
+            className="flex items-center text-slate-200 transition-colors duration-200 hover:text-sky-300"
           >
             <FaShoppingCart className="mr-1" />
 
             {cartCount > 0 && (
-              <span className="absolute -top-2 -right-3 bg-green-500 text-white text-xs font-bold rounded-full px-1.5">
+              <span className="absolute -top-2 -right-3 rounded-full bg-emerald-400 px-1.5 text-xs font-bold text-slate-950">
                 {cartCount}
               </span>
             )}
@@ -182,7 +199,7 @@ function Navbar() {
         <li>
           <Link
             to="/orders"
-            className="hover:text-yellow-400 flex items-center transition-colors duration-200"
+            className="flex items-center text-slate-200 transition-colors duration-200 hover:text-sky-300"
           >
             <FaBox className="mr-1" /> Orders
           </Link>
@@ -191,13 +208,13 @@ function Navbar() {
 
         {user ? (
           <>
-            <li className="text-yellow-300 font-semibold">
+            <li className="font-semibold text-sky-200">
               Hi, {user.name || user.email?.split("@")[0]}
             </li>
             <li>
               <button
                 onClick={handleLogout}
-                className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-full transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105"
+                className="rounded-full border border-white/10 bg-white/8 px-3 py-1.5 text-sm font-semibold text-white transition-all duration-300 hover:scale-105 hover:bg-red-500 hover:shadow-lg"
               >
                 Logout
               </button>
@@ -207,7 +224,7 @@ function Navbar() {
           <li>
             <Link
               to="/login"
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-full transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105"
+              className="rounded-full bg-gradient-to-r from-sky-400 to-blue-600 px-4 py-2 text-sm font-semibold uppercase tracking-[0.12em] text-white transition-all duration-300 hover:scale-105 hover:shadow-lg"
             >
               Login
             </Link>
@@ -220,19 +237,19 @@ function Navbar() {
         className="md:hidden cursor-pointer z-50"
         onClick={() => setMenuOpen(!menuOpen)}
       >
-        {menuOpen ? <FaTimes size={25} /> : <FaBars size={25} />}
+        {menuOpen ? <FaTimes size={22} /> : <FaBars size={22} />}
       </div>
 
 
       <ul
-        className={`md:hidden absolute top-full left-0 w-full bg-[#1a1a40] text-center flex flex-col space-y-4 py-4 transition-all duration-300 overflow-hidden ${menuOpen ? "max-h-96" : "max-h-0"
+        className={`absolute left-0 top-full flex w-full flex-col space-y-4 overflow-hidden border-b border-white/10 bg-[rgba(6,14,27,0.96)] py-4 text-center backdrop-blur-xl transition-all duration-300 md:hidden ${menuOpen ? "max-h-96" : "max-h-0"
           }`}
       >
         {navItems.map((item) => (
           <li key={item}>
             <Link
               to={item === "Home" ? "/" : `/${item.toLowerCase()}`}
-              className="hover:text-yellow-400 block py-1 transition-colors duration-200"
+              className="block py-1 text-sm font-semibold uppercase tracking-[0.16em] text-slate-200 transition-colors duration-200 hover:text-sky-300"
               onClick={() => setMenuOpen(false)}
             >
               {item}
@@ -243,12 +260,12 @@ function Navbar() {
         <li>
           <Link
             to="/wishlist"
-            className="hover:text-pink-500 flex justify-center items-center transition-colors duration-200 relative"
+            className="relative flex items-center justify-center text-slate-200 transition-colors duration-200 hover:text-sky-300"
             onClick={() => setMenuOpen(false)}
           >
             <FaHeart className="mr-1" /> Wishlist
             {wishlistCount > 0 && (
-              <span className="absolute top-0 right-[38%] bg-pink-500 text-white text-xs font-bold rounded-full px-1.5">
+              <span className="absolute right-[38%] top-0 rounded-full bg-cyan-400 px-1.5 text-xs font-bold text-slate-950">
                 {wishlistCount}
               </span>
             )}
@@ -258,12 +275,12 @@ function Navbar() {
         <li>
           <Link
             to="/cart"
-            className="hover:text-green-400 flex justify-center items-center transition-colors duration-200 relative"
+            className="relative flex items-center justify-center text-slate-200 transition-colors duration-200 hover:text-sky-300"
             onClick={() => setMenuOpen(false)}
           >
             <FaShoppingCart className="mr-1" /> Cart
             {cartCount > 0 && (
-              <span className="absolute top-0 right-[38%] bg-green-500 text-white text-xs font-bold rounded-full px-1.5">
+              <span className="absolute right-[38%] top-0 rounded-full bg-emerald-400 px-1.5 text-xs font-bold text-slate-950">
                 {cartCount}
               </span>
             )}
@@ -273,7 +290,7 @@ function Navbar() {
         <li>
           <Link
             to="/orders"
-            className="hover:text-yellow-400 flex justify-center items-center transition-colors duration-200"
+            className="flex items-center justify-center text-slate-200 transition-colors duration-200 hover:text-sky-300"
             onClick={() => setMenuOpen(false)}
           >
             <FaBox className="mr-1" /> Orders
@@ -282,7 +299,7 @@ function Navbar() {
 
         {user ? (
           <>
-            <li className="text-yellow-300 font-semibold">
+            <li className="font-semibold text-sky-200">
               Hi, {user.name || user.email?.split("@")[0]}
             </li>
             <li>
@@ -291,7 +308,7 @@ function Navbar() {
                   handleLogout();
                   setMenuOpen(false);
                 }}
-                className="bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-2 rounded-full inline-block transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105"
+                className="inline-block rounded-full border border-white/10 bg-white/8 px-5 py-2 text-sm font-semibold text-white transition-all duration-300 hover:scale-105 hover:bg-red-500 hover:shadow-lg"
               >
                 Logout
               </button>
@@ -301,7 +318,7 @@ function Navbar() {
           <li>
             <Link
               to="/login"
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-full inline-block transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105"
+              className="inline-block rounded-full bg-gradient-to-r from-sky-400 to-blue-600 px-5 py-2 text-sm font-semibold uppercase tracking-[0.12em] text-white transition-all duration-300 hover:scale-105 hover:shadow-lg"
               onClick={() => setMenuOpen(false)}
             >
               Login
@@ -314,5 +331,3 @@ function Navbar() {
 }
 
 export default Navbar;
-
-

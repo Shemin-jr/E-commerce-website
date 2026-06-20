@@ -518,20 +518,21 @@ export default function Orders() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-black">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-400"></div>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 text-slate-900">
+        <div className="w-12 h-12 border-4 border-sky-200 border-t-sky-600 rounded-full animate-spin mb-4"></div>
+        <p className="font-black italic uppercase tracking-widest animate-pulse">Retrieving Your History...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-black text-white py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-white text-slate-900 py-16 px-6 md:px-20">
 
       <div className="max-w-5xl mx-auto">
 
-        <header className="mb-10 text-center sm:text-left">
-          <h1 className="text-4xl font-extrabold tracking-tight">Orders</h1>
-          <p className="mt-2 text-lg text-gray-400">
+        <header className="mb-12 text-center sm:text-left">
+          <h1 className="text-4xl font-black italic uppercase tracking-tighter">My Orders</h1>
+          <p className="mt-2 text-lg text-slate-400 font-medium">
             Track, return, or buy things again.
           </p>
         </header>
@@ -540,50 +541,50 @@ export default function Orders() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center py-20 bg-gray-900 rounded-2xl shadow-sm border border-gray-700"
+            className="text-center py-24 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm"
           >
-            <ShoppingBagIcon className="mx-auto h-16 w-16 text-gray-500" />
-            <h3 className="mt-4 text-xl font-medium text-white">No orders yet</h3>
-            <p className="mt-2 text-gray-400">Go find the product you like.</p>
+            <ShoppingBagIcon className="mx-auto h-20 w-20 text-slate-200" />
+            <h3 className="mt-6 text-2xl font-black italic uppercase tracking-tighter text-slate-900">No orders yet</h3>
+            <p className="mt-2 text-slate-400 font-medium uppercase tracking-widest text-xs">Go find the gear you love.</p>
           </motion.div>
         ) : (
-          <div className="space-y-8">
+          <div className="space-y-10">
             {orders.map((order, index) => (
               <motion.div
                 key={order._id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-gray-900 rounded-2xl shadow-sm border border-gray-700 overflow-hidden hover:shadow-lg transition-shadow duration-300"
+                className="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden hover:shadow-2xl hover:border-sky-500/20 transition-all duration-500 group"
               >
 
                 {/* Order Header */}
-                <div className="px-6 py-4 bg-gray-800 border-b border-gray-700 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div className="px-8 py-6 bg-slate-50 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
 
-                  <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 text-sm text-gray-400">
+                  <div className="flex flex-wrap gap-8 text-sm">
 
                     <div>
-                      <span className="block font-medium text-white">Order ID</span>
-                      <span className="font-mono text-gray-300">
+                      <span className="block text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Order ID</span>
+                      <span className="font-bold text-slate-900">
                         #{order._id.slice(-8).toUpperCase()}
                       </span>
                     </div>
 
                     <div>
-                      <span className="block font-medium text-white">Date Placed</span>
-                      <span>{new Date(order.createdAt).toLocaleDateString()}</span>
+                      <span className="block text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Date Placed</span>
+                      <span className="font-bold text-slate-900">{new Date(order.createdAt).toLocaleDateString()}</span>
                     </div>
 
                     <div>
-                      <span className="block font-medium text-white">Total Amount</span>
-                      <span className="font-bold text-white">
+                      <span className="block text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Total Amount</span>
+                      <span className="font-black italic text-sky-600 text-lg">
                         ₹{order.total.toLocaleString()}
                       </span>
                     </div>
 
                   </div>
 
-                  <div className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center border ${getStatusColor(order.status)}`}>
+                  <div className={`px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center border-2 transition-all ${getStatusColor(order.status).replace('900', '100').replace('300', '600').replace('700', '200')}`}>
                     {getStatusIcon(order.status)}
                     {order.status}
                   </div>
@@ -591,38 +592,40 @@ export default function Orders() {
                 </div>
 
                 {/* Order Items */}
-                <div className="p-6">
+                <div className="p-8">
 
-                  <div className="space-y-6">
+                  <div className="space-y-8">
 
                     {order.items?.map((item, idx) => (
 
-                      <div key={idx} className="flex flex-col sm:flex-row items-center gap-6">
+                      <div key={idx} className="flex flex-col sm:flex-row items-center gap-8">
 
-                        <div className="flex-shrink-0 w-24 h-24 bg-gray-800 rounded-lg overflow-hidden border border-gray-700">
+                        <div className="flex-shrink-0 w-28 h-28 bg-slate-50 rounded-2xl overflow-hidden border border-slate-100 p-2 group-hover:scale-105 transition-transform duration-500">
 
                           <img
                             src={item.image || item.product?.image || "https://via.placeholder.com/100"}
                             alt={item.team || item.name}
-                            className="w-full h-full object-cover object-center"
+                            className="w-full h-full object-contain"
                           />
 
                         </div>
 
                         <div className="flex-1 text-center sm:text-left">
 
-                          <h4 className="text-lg font-semibold text-white truncate">
+                          <h4 className="text-xl font-black italic uppercase tracking-tighter text-slate-900 mb-2 truncate">
                             {item.team || item.name || "Product Name"}
                           </h4>
 
-                          <div className="mt-1 flex justify-center sm:justify-start gap-4 text-sm text-gray-400">
-                            <span className="bg-gray-800 px-2 py-0.5 rounded text-gray-300">
-                              Size: {item.size}
+                          <div className="mt-1 flex justify-center sm:justify-start gap-4 text-[10px] font-black uppercase tracking-widest">
+                            <span className="bg-slate-50 px-3 py-1 rounded-lg border border-slate-100 text-slate-400">
+                              Size: <span className="text-slate-900">{item.size}</span>
                             </span>
-                            <span>Qty: {item.quantity}</span>
+                            <span className="bg-slate-50 px-3 py-1 rounded-lg border border-slate-100 text-slate-400">
+                              Qty: <span className="text-slate-900">{item.quantity}</span>
+                            </span>
                           </div>
 
-                          <p className="mt-2 font-medium text-indigo-400">
+                          <p className="mt-4 font-black italic text-lg text-slate-900">
                             ₹{item.price.toLocaleString()}
                           </p>
 

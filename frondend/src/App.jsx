@@ -1,6 +1,8 @@
 
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // User Pages
 import Home from "./Pages/Home";
@@ -28,7 +30,7 @@ import Navbar from "./Component/Navbar";
 
 // ✅ Admin Protected Route
 function AdminPrivateRoute({ children }) {
-  const isAdmin = localStorage.getItem("isAdmin");
+  const isAdmin = localStorage.getItem("isAdmin") === "true";
   const adminData = localStorage.getItem("adminData");
   return isAdmin && adminData ? children : <Navigate to="/admin/login" replace />;
 }
@@ -50,7 +52,7 @@ function AppRouter() {
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/orders" element={<Orders />} />
-        
+
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
@@ -109,6 +111,7 @@ function AppRouter() {
           }
         />
       </Routes>
+      <ToastContainer position="top-right" autoClose={800} theme="dark" />
     </>
   );
 }

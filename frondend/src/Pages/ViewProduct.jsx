@@ -335,7 +335,7 @@ function ViewProduct() {
   };
 
   return (
-    <div className="bg-black text-white min-h-screen">
+    <div className="bg-white text-slate-900 min-h-screen">
       <div className="max-w-7xl mx-auto py-12 px-6 flex flex-col lg:flex-row gap-12">
 
         {/* Product Images */}
@@ -347,14 +347,14 @@ function ViewProduct() {
               modules={[Pagination, Autoplay]}
               pagination={{ clickable: true }}
               autoplay={{ delay: 2000, disableOnInteraction: false }}
-              className="rounded-2xl shadow-lg"
+              className="rounded-2xl shadow-sm border border-slate-100"
             >
               {images.map((img, i) => (
                 <SwiperSlide key={i}>
                   <img
                     src={img}
                     alt={`${product.team} view ${i + 1}`}
-                    className="w-full h-[500px] object-contain bg-gray-900 rounded-2xl"
+                    className="w-full h-[500px] object-contain bg-slate-50 rounded-2xl"
                   />
                 </SwiperSlide>
               ))}
@@ -367,7 +367,7 @@ function ViewProduct() {
 
         <div className="flex-1 space-y-6">
 
-          <h1 className="text-4xl font-bold text-white">
+          <h1 className="text-4xl font-black italic uppercase tracking-tighter text-slate-900">
             {product.team}
           </h1>
 
@@ -375,22 +375,22 @@ function ViewProduct() {
 
           <div>
             {product.salePrice &&
-            new Date(product.offerExpiry) > new Date() ? (
+              new Date(product.offerExpiry) > new Date() ? (
               <div className="flex items-center gap-3">
-                <span className="text-3xl text-red-500 font-bold">
+                <span className="text-3xl text-red-600 font-bold">
                   ₹ {product.salePrice}
                 </span>
 
-                <span className="text-xl text-gray-400 line-through">
+                <span className="text-xl text-slate-400 line-through">
                   ₹ {product.price}
                 </span>
 
-                <span className="bg-red-600 text-white text-xs px-2 py-1 rounded font-bold uppercase">
+                <span className="bg-red-100 text-red-600 text-xs px-2 py-1 rounded font-bold uppercase">
                   Save ₹{product.price - product.salePrice}
                 </span>
               </div>
             ) : (
-              <p className="text-3xl text-green-400 font-bold">
+              <p className="text-3xl text-sky-600 font-black italic">
                 ₹ {product.price}
               </p>
             )}
@@ -399,7 +399,7 @@ function ViewProduct() {
           {/* Description */}
 
           {product.description && (
-            <p className="text-gray-300 leading-relaxed">
+            <p className="text-slate-600 leading-relaxed font-medium">
               {product.description}
             </p>
           )}
@@ -409,7 +409,7 @@ function ViewProduct() {
           {product.sizes && product.sizes.length > 0 && (
             <div className="mt-6">
 
-              <h3 className="text-lg font-semibold text-white mb-3">
+              <h3 className="text-sm font-black uppercase tracking-widest text-slate-900 mb-4">
                 Select Size:
               </h3>
 
@@ -419,11 +419,10 @@ function ViewProduct() {
                   <button
                     key={size}
                     onClick={() => setSelectedSize(size)}
-                    className={`px-4 py-2 border rounded-full text-sm font-medium transition ${
-                      selectedSize === size
-                        ? "bg-blue-600 text-white border-blue-600"
-                        : "border-gray-600 text-gray-300 hover:border-blue-500"
-                    }`}
+                    className={`px-6 py-3 border-2 rounded-xl text-sm font-bold transition-all duration-300 ${selectedSize === size
+                        ? "bg-slate-900 text-white border-slate-900 shadow-lg"
+                        : "border-slate-100 bg-slate-50 text-slate-600 hover:border-sky-500 hover:bg-white"
+                      }`}
                   >
                     {size}
                   </button>
@@ -440,14 +439,14 @@ function ViewProduct() {
 
             <button
               onClick={handleAddToCart}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full transition font-semibold"
+              className="flex-1 bg-sky-600 hover:bg-sky-700 text-white px-8 py-5 rounded-2xl transition-all duration-300 font-black uppercase tracking-widest shadow-lg shadow-sky-200"
             >
               Add to Cart
             </button>
 
             <button
               onClick={handleBuyNow}
-              className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full transition font-semibold"
+              className="flex-1 bg-slate-900 hover:bg-black text-white px-8 py-5 rounded-2xl transition-all duration-300 font-black uppercase tracking-widest shadow-lg shadow-slate-200"
             >
               Buy Now
             </button>

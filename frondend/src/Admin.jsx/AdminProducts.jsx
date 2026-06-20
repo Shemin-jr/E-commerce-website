@@ -88,29 +88,37 @@ export default function AdminProducts() {
     }
   };
 
-  const inputClass = "w-full p-3 bg-gray-800 border border-gray-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all text-gray-100 placeholder-gray-500";
-  const labelClass = "block text-xs font-bold text-gray-400 mb-2 tracking-wide uppercase";
+  const inputClass = "w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all text-slate-900 placeholder-slate-400 font-bold uppercase text-[10px] tracking-widest";
+  const labelClass = "block text-[10px] font-black text-slate-400 mb-3 tracking-[0.2em] uppercase";
 
   if (loading)
-    return <div className="text-center p-8 text-indigo-400 font-bold animate-pulse">Loading Products...</div>;
+    return (
+      <div className="flex flex-col items-center justify-center p-20 text-blue-600 font-black animate-pulse">
+        <div className="w-12 h-12 border-4 border-slate-100 border-t-blue-600 rounded-full animate-spin mb-4" />
+        <span className="uppercase tracking-[0.3em] text-xs">Inventory Sync in Progress...</span>
+      </div>
+    );
 
   return (
-    <div className="p-4 md:p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="p-0">
+      <div className="max-w-7xl mx-auto space-y-10">
 
-        {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-          <h1 className="text-3xl font-bold text-white tracking-tight">Product Management</h1>
+        {/* Global Toolbar */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm">
+          <div className="flex flex-col">
+             <h1 className="text-3xl font-black italic uppercase tracking-tighter text-slate-900">Vault Inventory</h1>
+             <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mt-1">Stock Management System</p>
+          </div>
           <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
-            <div className="relative flex-1 sm:w-64">
+            <div className="relative flex-1 sm:w-80 group">
               <input
                 type="text"
-                placeholder="Search products..."
+                placeholder="Search inventory..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-4 py-2 bg-gray-900 border border-gray-700 text-gray-100 placeholder-gray-500 rounded-xl focus:ring-2 focus:ring-indigo-500 pl-10"
+                className="w-full pl-12 pr-6 py-4 bg-slate-50 border border-slate-100 text-slate-900 rounded-2xl focus:ring-2 focus:ring-blue-500/10 focus:border-blue-600 transition-all font-bold uppercase text-[10px] tracking-widest shadow-inner placeholder:text-slate-400"
               />
-              <span className="absolute left-3 top-2.5 text-gray-500">🔍</span>
+              <span className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-600 transition-colors">🔍</span>
             </div>
             <button
               onClick={() => {
@@ -118,72 +126,76 @@ export default function AdminProducts() {
                 setNewProduct({ team: '', sizes: ['S', 'M', 'L', 'XL'], price: '', category: 'Home', image: '', backImage: '', description: '', salePrice: '', offerExpiry: '' });
                 setShowForm(!showForm);
               }}
-              className={`${showForm ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' : 'bg-indigo-600 hover:bg-indigo-700 text-white'} px-6 py-2 rounded-xl font-bold shadow transition`}
+              className={`px-8 py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all duration-300 shadow-xl ${showForm ? 'bg-slate-50 text-slate-900 border border-slate-200' : 'bg-slate-900 text-white shadow-slate-100 hover:bg-blue-600 hover:shadow-blue-100'}`}
             >
-              {showForm ? 'Cancel' : '+ Add Product'}
+              {showForm ? 'Close Editor' : '+ Create Entry'}
             </button>
           </div>
         </div>
 
-        {/* Add / Edit Form */}
+        {/* Dynamic Editor Panel */}
         {showForm && (
-          <div className="bg-gray-900 border border-gray-700 p-6 rounded-2xl shadow-xl mb-6">
-            <h2 className="text-xl font-bold mb-6 text-white">
-              {editingProduct ? 'Update Product' : 'Add New Product'}
-            </h2>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-white border border-slate-100 p-10 rounded-[3rem] shadow-[0_40px_100px_rgba(0,0,0,0.05)] animate-in slide-in-from-top duration-500">
+            <div className="flex items-center gap-3 mb-10">
+               <div className="w-1.5 h-8 bg-blue-600 rounded-full" />
+               <h2 className="text-2xl font-black italic uppercase tracking-tighter text-slate-900">
+                 {editingProduct ? 'Update Record' : 'New Catalog Entry'}
+               </h2>
+            </div>
+            <form onSubmit={handleSubmit} className="space-y-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <div>
-                  <label className={labelClass}>Team Name</label>
+                  <label className={labelClass}>Team Designation</label>
                   <input type="text" value={newProduct.team} onChange={(e) => setNewProduct({ ...newProduct, team: e.target.value })}
-                    className={inputClass} placeholder="e.g. Manchester United" required />
+                    className={inputClass} placeholder="Real Madrid CF" required />
                 </div>
                 <div>
-                  <label className={labelClass}>Price (INR)</label>
+                  <label className={labelClass}>Base Price (INR)</label>
                   <input type="number" value={newProduct.price} onChange={(e) => setNewProduct({ ...newProduct, price: parseInt(e.target.value) || 0 })}
                     className={inputClass} required />
                 </div>
                 <div>
-                  <label className={labelClass}>Category</label>
+                  <label className={labelClass}>Kit Specification</label>
                   <select value={newProduct.category} onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })} className={inputClass}>
-                    <option value="Home" className="bg-gray-800">Home Kit</option>
-                    <option value="Away" className="bg-gray-800">Away Kit</option>
+                    <option value="Home">Home Kit</option>
+                    <option value="Away">Away Kit</option>
+                    <option value="Special Edition">Special Edition</option>
                   </select>
                 </div>
                 <div>
-                  <label className={labelClass}>Primary Image URL</label>
+                  <label className={labelClass}>Primary Visual Asset (URL)</label>
                   <input type="url" value={newProduct.image} onChange={(e) => setNewProduct({ ...newProduct, image: e.target.value })}
                     className={inputClass} required />
                 </div>
                 <div>
-                  <label className={labelClass}>Secondary Image URL</label>
+                  <label className={labelClass}>Secondary Visual Asset (URL)</label>
                   <input type="url" value={newProduct.backImage} onChange={(e) => setNewProduct({ ...newProduct, backImage: e.target.value })}
                     className={inputClass} required />
                 </div>
                 <div>
-                  <label className={labelClass}>Sale Price (INR) - Optional</label>
+                  <label className={labelClass}>Flash Sale Price (INR)</label>
                   <input type="number" value={newProduct.salePrice} onChange={(e) => setNewProduct({ ...newProduct, salePrice: e.target.value })}
-                    className={inputClass} placeholder="Discounted price" />
+                    className={inputClass} placeholder="0.00" />
                 </div>
-                <div>
-                  <label className={labelClass}>Offer Expiry Date</label>
+                <div className="lg:col-span-1">
+                  <label className={labelClass}>Offer Termination</label>
                   <input type="date" value={newProduct.offerExpiry ? newProduct.offerExpiry.substring(0, 10) : ''} onChange={(e) => setNewProduct({ ...newProduct, offerExpiry: e.target.value })}
                     className={inputClass} />
                 </div>
                 <div className="md:col-span-2">
-                  <label className={labelClass}>Description</label>
+                  <label className={labelClass}>Product Narrative</label>
                   <textarea value={newProduct.description} onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
-                    className={inputClass} rows="4" required />
+                    className={`${inputClass} normal-case text-sm font-medium tracking-normal`} rows="4" required />
                 </div>
               </div>
-              <div className="flex gap-4 pt-2">
-                <button type="submit" className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-3 rounded-xl font-bold transition shadow">
-                  {editingProduct ? 'Save Changes' : 'Add Product'}
+              <div className="flex gap-4 pt-4 border-t border-slate-50 mt-10">
+                <button type="submit" className="flex-1 bg-slate-900 hover:bg-blue-600 text-white px-8 py-5 rounded-2xl font-black italic uppercase tracking-widest transition-all shadow-xl shadow-slate-100 hover:shadow-blue-100">
+                  {editingProduct ? 'Commit Changes' : 'Publish to Catalog'}
                 </button>
                 {editingProduct && (
                   <button type="button" onClick={() => { setEditingProduct(null); setShowForm(false); }}
-                    className="px-6 py-3 rounded-xl bg-gray-700 text-gray-200 font-bold hover:bg-gray-600 transition">
-                    Cancel
+                    className="px-10 py-5 rounded-2xl bg-slate-50 text-slate-400 font-black uppercase tracking-widest hover:bg-slate-100 transition-all">
+                    Dismiss
                   </button>
                 )}
               </div>
@@ -191,54 +203,57 @@ export default function AdminProducts() {
           </div>
         )}
 
-        {/* Products Table */}
-        <div className="bg-gray-900 rounded-2xl shadow-xl border border-gray-800 overflow-hidden">
-          <table className="min-w-full divide-y divide-gray-800">
-            <thead className="bg-gray-800/60">
+        {/* Registry Table */}
+        <div className="bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.03)] border border-slate-100 overflow-hidden">
+          <table className="min-w-full divide-y divide-slate-100">
+            <thead className="bg-slate-50/50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Product</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Price</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Category</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Sizes</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Actions</th>
+                <th className="px-8 py-6 text-left text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Product Metadata</th>
+                <th className="px-8 py-6 text-left text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Revenue Unit</th>
+                <th className="px-8 py-6 text-left text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Classification</th>
+                <th className="px-8 py-6 text-left text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Dimensions</th>
+                <th className="px-8 py-6 text-left text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Operations</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800">
+            <tbody className="divide-y divide-slate-50">
               {products.map((product) => (
-                <tr key={product._id || product.id} className="hover:bg-gray-800/50 transition-colors group">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center gap-4">
-                      <img src={product.image} alt={product.team} className="h-12 w-12 object-contain rounded-lg bg-gray-800 p-1 border border-gray-700" />
+                <tr key={product._id || product.id} className="hover:bg-slate-50/50 transition-all group">
+                  <td className="px-8 py-6 whitespace-nowrap">
+                    <div className="flex items-center gap-6">
+                      <div className="relative group-hover:scale-110 transition-transform">
+                         <div className="absolute inset-0 bg-blue-500/10 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                         <img src={product.image} alt={product.team} className="relative h-14 w-14 object-contain rounded-xl bg-slate-50 p-1 border border-slate-100" />
+                      </div>
                       <div>
-                        <div className="text-sm font-medium text-gray-100">{product.team}</div>
-                        <div className="text-sm text-gray-500">{product.description.substring(0, 30)}...</div>
+                        <div className="text-sm font-black italic uppercase tracking-tighter text-slate-900">{product.team}</div>
+                        <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{product.description.substring(0, 30)}...</div>
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-200">₹{product.price}</div>
+                  <td className="px-8 py-6 whitespace-nowrap">
+                    <div className="text-sm font-black italic text-slate-900">₹{product.price.toLocaleString()}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full border
+                  <td className="px-8 py-6 whitespace-nowrap">
+                    <span className={`px-4 py-1.5 inline-flex text-[10px] leading-5 font-black uppercase tracking-widest rounded-full border-2
                       ${product.category === 'Home'
-                        ? 'bg-orange-500/20 text-orange-400 border-orange-500/30'
-                        : 'bg-blue-500/20 text-blue-400 border-blue-500/30'}`}>
+                        ? 'bg-amber-50 text-amber-600 border-amber-100'
+                        : 'bg-blue-50 text-blue-600 border-blue-100'}`}>
                       {product.category}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex gap-1 flex-wrap">
+                  <td className="px-8 py-6 whitespace-nowrap">
+                    <div className="flex gap-2">
                       {product.sizes.map((size) => (
-                        <span key={size} className="px-2 py-1 text-xs font-medium bg-gray-800 text-gray-400 rounded-lg border border-gray-700">
+                        <span key={size} className="px-3 py-1 text-[10px] font-black bg-slate-50 text-slate-400 rounded-lg border border-slate-100">
                           {size}
                         </span>
                       ))}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <div className="flex space-x-4">
-                      <button onClick={() => handleEditProduct(product)} className="text-indigo-400 hover:text-indigo-300 transition-colors">Edit</button>
-                      <button onClick={() => handleDeleteProduct(product._id || product.id)} className="text-red-400 hover:text-red-300 transition-colors">Delete</button>
+                  <td className="px-8 py-6 whitespace-nowrap text-sm font-medium">
+                    <div className="flex space-x-6">
+                      <button onClick={() => handleEditProduct(product)} className="text-slate-900 hover:text-blue-600 font-black italic uppercase text-[10px] tracking-widest transition-all">Edit</button>
+                      <button onClick={() => handleDeleteProduct(product._id || product.id)} className="text-red-500 hover:text-red-700 font-black italic uppercase text-[10px] tracking-widest transition-all">Delete</button>
                     </div>
                   </td>
                 </tr>
@@ -247,24 +262,24 @@ export default function AdminProducts() {
           </table>
         </div>
 
-        {/* Pagination */}
+        {/* Global Pagination */}
         {totalPages > 1 && (
-          <div className="flex justify-center items-center gap-4 mt-8 pb-8">
+          <div className="flex justify-center items-center gap-4 mt-8 pb-10">
             <button
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
               disabled={currentPage === 1}
-              className="px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg text-sm font-medium text-gray-300 hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="px-6 py-3 bg-white border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
             >
-              Previous
+              Prev
             </button>
-            <div className="flex gap-2">
+            <div className="flex gap-3">
               {[...Array(totalPages)].map((_, i) => (
                 <button
                   key={i + 1}
                   onClick={() => setCurrentPage(i + 1)}
-                  className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${currentPage === i + 1
-                      ? 'bg-indigo-600 text-white'
-                      : 'bg-gray-900 border border-gray-700 text-gray-300 hover:bg-gray-800'
+                  className={`w-10 h-10 flex items-center justify-center rounded-xl text-[10px] font-black transition-all ${currentPage === i + 1
+                      ? 'bg-slate-900 text-white shadow-xl shadow-slate-100 scale-110'
+                      : 'bg-white border border-slate-100 text-slate-400 hover:bg-slate-50'
                     }`}
                 >
                   {i + 1}
@@ -274,7 +289,7 @@ export default function AdminProducts() {
             <button
               onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
               disabled={currentPage === totalPages}
-              className="px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg text-sm font-medium text-gray-300 hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="px-6 py-3 bg-white border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
             >
               Next
             </button>

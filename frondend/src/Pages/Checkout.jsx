@@ -536,102 +536,120 @@ function Checkout() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-black text-white py-12 px-6">
+    <div className="min-h-screen w-full bg-slate-50 text-slate-900 py-12 px-6">
       <div className="max-w-6xl mx-auto">
 
-        <h1 className="text-4xl font-bold text-center mb-10">
+        <h1 className="text-4xl font-black italic uppercase tracking-tighter text-center mb-10">
           🧾 Checkout
         </h1>
 
         {selectedProducts.length === 0 ? (
-          <div className="text-center text-gray-400">
-            <p>No products selected for checkout.</p>
+          <div className="text-center text-slate-400 py-20 bg-white rounded-3xl border border-slate-100 shadow-sm">
+            <p className="text-xl font-bold italic uppercase tracking-widest mb-6">No products selected for checkout.</p>
             <button
               onClick={() => navigate("/cart")}
-              className="mt-6 px-6 py-3 bg-blue-600 rounded-lg hover:bg-blue-700"
+              className="px-10 py-5 bg-sky-600 text-white rounded-2xl font-black uppercase tracking-widest shadow-lg shadow-sky-100 hover:bg-sky-700 transition-all duration-300"
             >
               Back to Cart
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
 
             {/* Shipping Details */}
-            <div className="bg-gray-900 border border-gray-700 rounded-2xl p-6">
+            <div className="bg-white border border-slate-100 rounded-3xl p-8 shadow-sm">
 
-              <h2 className="text-2xl font-semibold mb-4">
+              <h2 className="text-2xl font-black italic uppercase tracking-tighter mb-6">
                 Shipping Details
               </h2>
 
-              <div className="grid gap-4">
+              <div className="grid gap-5">
 
-                <input
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Full Name"
-                  className="bg-black border border-gray-700 px-3 py-2 rounded-lg w-full"
-                />
-
-                <input
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Email Address"
-                  className="bg-black border border-gray-700 px-3 py-2 rounded-lg w-full"
-                />
-
-                <input
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="Phone Number"
-                  className="bg-black border border-gray-700 px-3 py-2 rounded-lg w-full"
-                />
-
-                <input
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  placeholder="Street Address"
-                  className="bg-black border border-gray-700 px-3 py-2 rounded-lg w-full"
-                />
-
-                <div className="grid grid-cols-2 gap-4">
-
+                <div className="space-y-1">
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-2">Full Name</p>
                   <input
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    placeholder="City"
-                    className="bg-black border border-gray-700 px-3 py-2 rounded-lg"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="e.g. John Doe"
+                    className="bg-slate-50 border border-slate-100 px-5 py-4 rounded-2xl w-full text-slate-900 outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all"
                   />
+                </div>
 
+                <div className="space-y-1">
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-2">Email Address</p>
                   <input
-                    value={zip}
-                    onChange={(e) => setZip(e.target.value)}
-                    placeholder="ZIP"
-                    className="bg-black border border-gray-700 px-3 py-2 rounded-lg"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="e.g. john@example.com"
+                    className="bg-slate-50 border border-slate-100 px-5 py-4 rounded-2xl w-full text-slate-900 outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all"
                   />
+                </div>
+
+                <div className="space-y-1">
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-2">Phone Number</p>
+                  <input
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="e.g. 1234567890"
+                    className="bg-slate-50 border border-slate-100 px-5 py-4 rounded-2xl w-full text-slate-900 outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-2">Street Address</p>
+                  <input
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    placeholder="e.g. 123 Main St"
+                    className="bg-slate-50 border border-slate-100 px-5 py-4 rounded-2xl w-full text-slate-900 outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-5">
+
+                  <div className="space-y-1">
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-2">City</p>
+                    <input
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                      placeholder="e.g. London"
+                      className="bg-slate-50 border border-slate-100 px-5 py-4 rounded-2xl w-full text-slate-900 outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-2">ZIP Code</p>
+                    <input
+                      value={zip}
+                      onChange={(e) => setZip(e.target.value)}
+                      placeholder="e.g. 123456"
+                      className="bg-slate-50 border border-slate-100 px-5 py-4 rounded-2xl w-full text-slate-900 outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all"
+                    />
+                  </div>
 
                 </div>
 
               </div>
 
-              <h2 className="text-2xl font-semibold mt-8 mb-3">
+              <h2 className="text-2xl font-black italic uppercase tracking-tighter mt-10 mb-5">
                 Payment Method
               </h2>
 
               <select
                 value={payment}
                 onChange={(e) => setPayment(e.target.value)}
-                className="bg-black border border-gray-700 px-3 py-2 rounded-lg w-full"
+                className="bg-slate-50 border border-slate-100 px-5 py-4 rounded-2xl w-full text-slate-900 outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all appearance-none cursor-pointer font-bold uppercase tracking-widest text-xs"
               >
                 <option>Credit / Debit Card</option>
                 <option>Cash on Delivery</option>
                 <option>UPI</option>
               </select>
 
-              <div className="mt-8 border-t border-gray-700 pt-4 flex justify-between items-center">
+              <div className="mt-10 border-t border-slate-100 pt-6 flex flex-col md:flex-row justify-between items-center gap-6">
 
                 <div>
-                  <p className="text-gray-400">Order Total</p>
-                  <p className="text-2xl font-bold">
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Final Amount</p>
+                  <p className="text-3xl font-black italic text-slate-900">
                     ₹ {subtotal.toFixed(2)}
                   </p>
                 </div>
@@ -639,9 +657,9 @@ function Checkout() {
                 <button
                   onClick={handleOrderNow}
                   disabled={loading}
-                  className="px-8 py-3 bg-green-600 rounded-lg hover:bg-green-700"
+                  className="w-full md:w-auto px-12 py-5 bg-emerald-500 text-white rounded-2xl font-black uppercase tracking-widest shadow-lg shadow-emerald-100 hover:bg-emerald-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {loading ? "Placing Order..." : "Place Order"}
+                  {loading ? "Placing Order..." : "Place Order Now"}
                 </button>
 
               </div>
@@ -649,42 +667,42 @@ function Checkout() {
             </div>
 
             {/* Order Summary */}
-            <div className="bg-gray-900 border border-gray-700 rounded-2xl p-6">
+            <div className="bg-white border border-slate-100 rounded-3xl p-8 shadow-sm h-fit sticky top-24">
 
-              <h2 className="text-2xl font-semibold mb-4">
+              <h2 className="text-2xl font-black italic uppercase tracking-tighter mb-8">
                 Order Summary
               </h2>
 
-              <div className="space-y-4">
+              <div className="space-y-6">
 
                 {selectedProducts.map((item, index) => (
 
                   <div
                     key={index}
-                    className="flex justify-between border-b border-gray-700 pb-3"
+                    className="flex justify-between items-center bg-slate-50 p-4 rounded-2xl border border-slate-100 group hover:border-sky-500/30 transition-all"
                   >
 
-                    <div className="flex gap-4">
+                    <div className="flex gap-4 items-center">
 
                       <img
                         src={item.image}
                         alt={item.name}
-                        className="w-20 h-20 object-contain bg-black border border-gray-700 rounded-lg"
+                        className="w-20 h-20 object-contain bg-white border border-slate-100 rounded-xl p-2 group-hover:scale-110 transition-transform"
                       />
 
                       <div>
-                        <p className="font-semibold">
+                        <p className="font-black italic uppercase tracking-tighter text-slate-900">
                           {item.name}
                         </p>
 
-                        <p className="text-gray-400">
+                        <p className="text-slate-400 font-bold text-xs uppercase tracking-widest mt-1">
                           ₹ {item.price} × {item.quantity}
                         </p>
                       </div>
 
                     </div>
 
-                    <p className="text-blue-400 font-semibold">
+                    <p className="text-sky-600 font-black italic text-lg">
                       ₹ {(item.price * item.quantity).toFixed(2)}
                     </p>
 
@@ -694,15 +712,19 @@ function Checkout() {
 
               </div>
 
-              <div className="border-t border-gray-700 pt-4 mt-4 flex justify-between text-lg font-bold">
+              <div className="border-t border-slate-100 pt-6 mt-8 flex justify-between items-center">
 
-                <span>Total</span>
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Total Payable</span>
 
-                <span>
+                <span className="text-3xl font-black italic text-slate-900">
                   ₹ {subtotal.toFixed(2)}
                 </span>
 
               </div>
+
+              <p className="text-[10px] text-slate-400 text-center mt-6 font-bold uppercase tracking-widest">
+                Safe & Secure Checkout
+              </p>
 
             </div>
 

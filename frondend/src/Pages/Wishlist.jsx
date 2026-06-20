@@ -309,12 +309,12 @@ function Wishlist() {
 
   if (!wishlist || wishlist.length === 0) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-black text-white">
-        <h2 className="text-2xl font-bold mb-3">Your wishlist is empty</h2>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 text-slate-900">
+        <h2 className="text-3xl font-black italic uppercase tracking-tighter mb-6">Your wishlist is empty</h2>
 
         <a
           href="/products"
-          className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
+          className="bg-sky-600 text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest shadow-lg shadow-sky-100 hover:bg-sky-700 transition-all duration-300"
         >
           Browse Products
         </a>
@@ -323,19 +323,19 @@ function Wishlist() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white py-16 px-6 md:px-20">
+    <div className="min-h-screen bg-white text-slate-900 py-16 px-6 md:px-20">
 
-      <h2 className="text-3xl font-bold text-center mb-10 text-pink-500">
-        💖 Your Wishlist
+      <h2 className="text-4xl font-black italic uppercase tracking-tighter text-center mb-10">
+           Wishlist
       </h2>
 
       {/* Total */}
 
-      <div className="max-w-4xl mx-auto mb-6 flex justify-end">
-        <div className="bg-gray-900 px-4 py-2 rounded-lg shadow-sm">
-          <span className="text-sm text-gray-400">Total:</span>
+      <div className="max-w-4xl mx-auto mb-10 flex justify-end">
+        <div className="bg-slate-50 px-6 py-4 rounded-2xl border border-slate-100 shadow-sm">
+          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Wishlist Value:</span>
 
-          <div className="text-xl font-bold text-green-400">
+          <div className="text-2xl font-black italic text-sky-600">
             ₹{" "}
             {wishlist
               .reduce(
@@ -349,53 +349,55 @@ function Wishlist() {
 
       {/* Products */}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
         {wishlist.map((item) => {
           const productId = item._id || item.id;
 
           return (
             <div
               key={productId}
-              className="bg-gray-900 rounded-2xl shadow-lg overflow-hidden hover:scale-105 transition-all"
+              className="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden hover:shadow-2xl transition-all duration-500 group"
             >
 
-              <img
-                src={
-                  item.image ||
-                  "https://via.placeholder.com/400x400?text=No+Image"
-                }
-                alt={item.team || item.name || "Product"}
-                className="w-full h-80 object-cover"
-              />
+              <div className="aspect-[4/5] bg-slate-50 p-8 flex items-center justify-center overflow-hidden">
+                <img
+                  src={
+                    item.image ||
+                    "https://via.placeholder.com/400x400?text=No+Image"
+                  }
+                  alt={item.team || item.name || "Product"}
+                  className="max-h-full object-contain group-hover:scale-110 transition-transform duration-700"
+                />
+              </div>
 
-              <div className="p-6 text-center">
+              <div className="p-8 text-center">
 
-                <h3 className="text-xl font-semibold text-white mb-2">
+                <h3 className="text-xl font-black italic uppercase tracking-tighter text-slate-900 mb-2 truncate">
                   {item.team || item.name}
                 </h3>
 
-                <p className="text-green-400 font-semibold text-lg mb-4">
+                <p className="text-sky-600 font-black italic text-xl mb-6">
                   ₹{item.price || "0.00"}
                 </p>
 
                 {/* Size */}
 
-                <div className="mb-4">
-                  <p className="font-semibold text-gray-300 mb-2">
+                <div className="mb-6">
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-3">
                     Select Size:
                   </p>
 
-                  <div className="flex justify-center space-x-2">
+                  <div className="flex justify-center flex-wrap gap-2">
 
                     {["S", "M", "L", "XL"].map((size) => (
 
                       <button
                         key={size}
                         onClick={() => handleSizeSelect(productId, size)}
-                        className={`px-3 py-1 rounded-md border ${
+                        className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border-2 transition-all duration-300 ${
                           selectedSizes[productId] === size
-                            ? "bg-blue-600 text-white"
-                            : "bg-gray-800 text-gray-300 border-gray-600 hover:bg-gray-700"
+                            ? "bg-slate-900 text-white border-slate-900 shadow-md"
+                            : "bg-slate-50 text-slate-400 border-slate-50 hover:border-sky-500 hover:text-sky-600"
                         }`}
                       >
                         {size}
@@ -409,19 +411,21 @@ function Wishlist() {
 
                 {/* Buttons */}
 
-                <button
-                  onClick={() => addToCart(item)}
-                  className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg mr-2 transition"
-                >
-                  Add to Cart
-                </button>
+                <div className="flex flex-col gap-3">
+                  <button
+                    onClick={() => addToCart(item)}
+                    className="w-full bg-sky-600 hover:bg-sky-700 text-white px-6 py-4 rounded-xl font-black uppercase tracking-widest shadow-lg shadow-sky-100 transition-all text-xs"
+                  >
+                    Add to Cart
+                  </button>
 
-                <button
-                  onClick={() => removeFromWishlist(productId)}
-                  className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition"
-                >
-                  Remove
-                </button>
+                  <button
+                    onClick={() => removeFromWishlist(productId)}
+                    className="w-full bg-slate-50 hover:bg-red-50 text-slate-400 hover:text-red-500 px-6 py-4 rounded-xl font-black uppercase tracking-widest transition-all text-xs border border-slate-100 hover:border-red-100"
+                  >
+                    Remove
+                  </button>
+                </div>
 
               </div>
 

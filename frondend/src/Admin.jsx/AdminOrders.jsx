@@ -94,82 +94,88 @@ export default function AdminOrders() {
 
   const getStatusStyle = (status) => {
     const styles = {
-      pending: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
-      processing: "bg-blue-500/20 text-blue-400 border-blue-500/30",
-      shipped: "bg-indigo-500/20 text-indigo-400 border-indigo-500/30",
-      delivered: "bg-green-500/20 text-green-400 border-green-500/30",
-      cancelled: "bg-red-500/20 text-red-400 border-red-500/30",
-      "cancellation requested": "bg-orange-500/20 text-orange-400 border-orange-500/30",
+      pending: "bg-amber-100 text-amber-700 border-amber-200",
+      processing: "bg-blue-100 text-blue-700 border-blue-200",
+      shipped: "bg-indigo-100 text-indigo-700 border-indigo-200",
+      delivered: "bg-emerald-100 text-emerald-700 border-emerald-200",
+      cancelled: "bg-red-100 text-red-700 border-red-200",
+      "cancellation requested": "bg-orange-100 text-orange-700 border-orange-200",
     };
-    return styles[status?.toLowerCase()] || "bg-gray-500/20 text-gray-400 border-gray-500/30";
+    return styles[status?.toLowerCase()] || "bg-slate-100 text-slate-700 border-slate-200";
   };
 
   if (loading)
     return (
-      <div className="text-center p-8 text-indigo-400 font-bold animate-pulse">
-        Loading Orders...
+      <div className="flex flex-col items-center justify-center p-20 text-blue-600 font-black animate-pulse">
+        <div className="w-12 h-12 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin mb-4" />
+        <span className="uppercase tracking-[0.3em] text-xs">Syncing Live Orders...</span>
       </div>
     );
 
   return (
-    <div className="p-4 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="p-0">
+      <div className="max-w-7xl mx-auto space-y-10">
 
-        {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <h1 className="text-3xl font-bold text-white tracking-tight">Order Management</h1>
-          <div className="bg-gray-900 border border-gray-700 rounded-xl px-4 py-2 shadow-sm">
-            <label className="text-sm font-medium text-gray-400 mr-2">Filter:</label>
+        {/* Action Bar */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm">
+          <div className="flex flex-col">
+             <h1 className="text-3xl font-black italic uppercase tracking-tighter text-slate-900">0rders</h1>
+             <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mt-1"></p>
+          </div>
+          <div className="bg-slate-50 border border-slate-100 rounded-2xl px-6 py-4 shadow-inner flex items-center gap-4">
+            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">View Category:</label>
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="bg-transparent text-gray-200 focus:outline-none cursor-pointer"
+              className="bg-transparent text-slate-900 font-bold uppercase text-[10px] tracking-widest focus:outline-none cursor-pointer"
             >
-              <option value="all" className="bg-gray-900">All</option>
-              <option value="pending" className="bg-gray-900">Ordered</option>
-              <option value="processing" className="bg-gray-900">Processing</option>
-              <option value="shipped" className="bg-gray-900">Shipped</option>
-              <option value="delivered" className="bg-gray-900">Delivered</option>
-              <option value="cancellation requested" className="bg-gray-900">Cancellation Requested</option>
-              <option value="cancelled" className="bg-gray-900">Cancelled</option>
+              <option value="all">Every Order</option>
+              <option value="pending">New Orders</option>
+              <option value="processing">In Process</option>
+              <option value="shipped">On Route</option>
+              <option value="delivered">Completed</option>
+              <option value="cancellation requested">Requests</option>
+              <option value="cancelled">Cancelled</option>
             </select>
           </div>
         </div>
 
-        {/* Table */}
-        <div className="bg-gray-900 rounded-2xl shadow-xl border border-gray-800 overflow-hidden">
-          <table className="min-w-full divide-y divide-gray-800">
-            <thead className="bg-gray-800/60">
+        {/* Table Workspace */}
+        <div className="bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-slate-100 overflow-hidden">
+          <table className="min-w-full divide-y divide-slate-100">
+            <thead className="bg-slate-50/50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Order ID</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Customer</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Total</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Actions</th>
+                <th className="px-8 py-5 text-left text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Transaction ID</th>
+                <th className="px-8 py-5 text-left text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Client Profile</th>
+                <th className="px-8 py-5 text-left text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Revenue</th>
+                <th className="px-8 py-5 text-left text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Current State</th>
+                <th className="px-8 py-5 text-left text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Operations</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800">
+            <tbody className="divide-y divide-slate-50">
               {orders.map((order) => (
-                <tr key={order._id || order.id} className="hover:bg-gray-800/50 transition-colors">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">#{order._id || order.id}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                <tr key={order._id || order.id} className="hover:bg-slate-50/50 transition-all duration-300 group">
+                  <td className="px-8 py-6 whitespace-nowrap text-xs font-mono font-bold text-slate-400">#{ (order._id || order.id).slice(-8).toUpperCase() }</td>
+                  <td className="px-8 py-6 whitespace-nowrap">
                     <div className="flex flex-col">
-                      <span className="text-sm font-medium text-gray-100">{getCustomerName(order)}</span>
-                      <span className="text-sm text-gray-500">{getCustomerEmail(order)}</span>
+                      <span className="text-sm font-black italic uppercase tracking-tighter text-slate-900 group-hover:text-blue-600 transition-colors">{getCustomerName(order)}</span>
+                      <span className="text-[10px] font-bold text-slate-400 mt-0.5 uppercase tracking-widest">{getCustomerEmail(order)}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-200">₹{calculateTotal(order.items).toFixed(0)}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full border ${getStatusStyle(order.status)}`}>
-                      {order.status === 'pending' ? 'Ordered' : order.status}
+                  <td className="px-8 py-6 whitespace-nowrap">
+                     <span className="text-sm font-black italic text-slate-900">₹{calculateTotal(order.items).toLocaleString()}</span>
+                  </td>
+                  <td className="px-8 py-6 whitespace-nowrap">
+                    <span className={`px-4 py-1.5 inline-flex text-[10px] leading-5 font-black uppercase tracking-widest rounded-xl border-2 transition-all ${getStatusStyle(order.status)}`}>
+                      {order.status === 'pending' ? 'New' : order.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-8 py-6">
                     <button
                       onClick={() => setSelectedOrder(order)}
-                      className="text-indigo-400 hover:text-indigo-300 font-medium text-sm transition"
+                      className="bg-slate-900 text-white px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-blue-600 hover:shadow-lg hover:shadow-blue-100 transition-all"
                     >
-                      View
+                      Inspect
                     </button>
                   </td>
                 </tr>
@@ -178,124 +184,91 @@ export default function AdminOrders() {
           </table>
         </div>
 
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="flex justify-center items-center gap-4 mt-8 pb-8">
-            <button
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-              className="px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg shadow-sm text-sm font-medium text-gray-300 hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-            >
-              Previous
-            </button>
-            <div className="flex gap-2">
-              {[...Array(totalPages)].map((_, i) => (
-                <button
-                  key={i + 1}
-                  onClick={() => setCurrentPage(i + 1)}
-                  className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${currentPage === i + 1
-                      ? 'bg-indigo-600 text-white shadow-md'
-                      : 'bg-gray-900 border border-gray-700 text-gray-300 hover:bg-gray-800'
-                    }`}
-                >
-                  {i + 1}
-                </button>
-              ))}
-            </div>
-            <button
-              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-              disabled={currentPage === totalPages}
-              className="px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg shadow-sm text-sm font-medium text-gray-300 hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-            >
-              Next
-            </button>
-          </div>
-        )}
-
-        {/* Order Modal */}
+        {/* Global Modal Overlay */}
         {selectedOrder && (
-          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex justify-center items-center z-50 p-4">
-            <div className="bg-gray-900 border border-gray-700 w-full max-w-lg p-6 rounded-2xl shadow-2xl overflow-hidden">
+          <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-md flex justify-center items-center z-50 p-6">
+            <div className="bg-white border border-slate-100 w-full max-w-2xl p-10 rounded-[3rem] shadow-[0_40px_100px_rgba(0,0,0,0.15)] overflow-hidden animate-in fade-in zoom-in duration-300">
 
-              <div className="flex justify-between items-center mb-6 border-b border-gray-800 pb-4">
-                <h2 className="text-xl font-bold text-white">Order #{selectedOrder._id || selectedOrder.id}</h2>
+              <div className="flex justify-between items-center mb-8 border-b border-slate-100 pb-8">
+                <div className="flex flex-col">
+                  <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-600 mb-1">Detailed Record</span>
+                  <p className="text-2xl font-black italic uppercase tracking-tighter text-slate-900">Order #{selectedOrder._id || selectedOrder.id}</p>
+                </div>
                 <button
                   onClick={() => setSelectedOrder(null)}
-                  className="text-gray-500 hover:text-white transition text-2xl"
+                  className="w-12 h-12 flex items-center justify-center bg-slate-50 text-slate-400 hover:text-red-500 rounded-2xl transition-all hover:rotate-90"
                 >
-                  &times;
+                  <span className="text-2xl font-black">✕</span>
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div>
-                  <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Customer Info</h3>
-                  <div className="bg-gray-800 px-4 py-3 rounded-xl border border-gray-700">
-                    <p className="text-sm font-medium text-white">{getCustomerName(selectedOrder)}</p>
-                    <p className="text-sm text-gray-400">{getEmail(selectedOrder)}</p>
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Order Date</h3>
-                  <div className="bg-gray-800 px-4 py-3 rounded-xl border border-gray-700">
-                    <p className="text-sm text-gray-200">{new Date(selectedOrder.createdAt).toLocaleString()}</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <div className="space-y-4">
+                  <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Client Logistics</h3>
+                  <div className="bg-slate-50 p-6 rounded-3xl border border-slate-100">
+                    <p className="text-md font-black italic uppercase tracking-tighter text-slate-900">{getCustomerName(selectedOrder)}</p>
+                    <p className="text-xs font-bold text-slate-400 mt-1 uppercase tracking-widest">{getEmail(selectedOrder)}</p>
+                    <p className="text-xs font-medium text-slate-600 mt-3 flex items-center gap-2">
+                       <span className="w-1.5 h-1.5 bg-blue-500 rounded-full" />
+                       Ordered: {new Date(selectedOrder.createdAt).toLocaleDateString()}
+                    </p>
                   </div>
                 </div>
 
+                <div className="space-y-4">
+                  <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Status Update</h3>
+                  <div className="bg-slate-50 p-4 rounded-3xl border border-slate-100">
+                    <select
+                      value={selectedOrder.status?.charAt(0).toUpperCase() + selectedOrder.status?.slice(1).toLowerCase()}
+                      onChange={(e) => updateOrderStatus(selectedOrder._id || selectedOrder.id, e.target.value)}
+                      className="w-full bg-white px-5 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] text-slate-900 outline-none border-2 border-slate-100 focus:border-blue-600 transition-all appearance-none cursor-pointer"
+                    >
+                      <option value="Pending">Ordered</option>
+                      <option value="Processing">Processing</option>
+                      <option value="Shipped">Shipped</option>
+                      <option value="Delivered">Delivered</option>
+                      <option value="Cancellation Requested">Cancellation Requested</option>
+                      <option value="Cancelled">Cancelled</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Conflict/Cancellation Alert */}
                 {(selectedOrder.status === 'Cancellation Requested' || selectedOrder.status === 'Cancelled') && (
-                  <div className="col-span-full bg-red-500/10 p-4 rounded-xl border border-red-500/30">
-                    <h3 className="text-sm font-bold text-red-400 mb-2">Cancellation Request</h3>
-                    <p className="text-sm text-red-300"><strong>Reason:</strong> {selectedOrder.cancelReason || "No reason provided"}</p>
-                    {selectedOrder.cancelledAt && (
-                      <p className="text-xs text-red-500 mt-1">Date: {new Date(selectedOrder.cancelledAt).toLocaleString()}</p>
-                    )}
+                  <div className="col-span-full bg-red-50 p-6 rounded-[2rem] border-2 border-red-100/50">
+                    <h3 className="text-xs font-black uppercase tracking-[0.3em] text-red-600 mb-2">Cancellation Alert</h3>
+                    <p className="text-sm font-bold text-slate-700 italic">"{selectedOrder.cancelReason || "System priority cancellation"}"</p>
                   </div>
                 )}
-
-                <div className="col-span-full">
-                  <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Update Status</h3>
-                  <select
-                    value={selectedOrder.status?.charAt(0).toUpperCase() + selectedOrder.status?.slice(1).toLowerCase()}
-                    onChange={(e) => updateOrderStatus(selectedOrder._id || selectedOrder.id, e.target.value)}
-                    className="mt-1 block w-full px-3 py-2 text-sm rounded-xl bg-gray-800 border border-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  >
-                    <option value="Pending">Ordered</option>
-                    <option value="Processing">Processing</option>
-                    <option value="Shipped">Shipped</option>
-                    <option value="Delivered">Delivered</option>
-                    <option value="Cancellation Requested">Cancellation Requested</option>
-                    <option value="Cancelled">Cancelled</option>
-                  </select>
-                </div>
               </div>
 
-              <div>
-                <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Order Items</h3>
-                <div className="border border-gray-700 rounded-xl overflow-hidden">
-                  <ul className="divide-y divide-gray-800 max-h-48 overflow-y-auto">
+              <div className="space-y-4">
+                <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Inventory Items</h3>
+                <div className="bg-slate-50 rounded-3xl border border-slate-100 overflow-hidden">
+                  <ul className="divide-y divide-slate-100 max-h-48 overflow-y-auto">
                     {selectedOrder.items.map((item, i) => (
-                      <li key={i} className="px-4 py-3 flex justify-between items-center bg-gray-800/50 hover:bg-gray-800 transition">
-                        <div className="flex items-center gap-3">
+                      <li key={i} className="px-6 py-4 flex justify-between items-center hover:bg-white transition-colors">
+                        <div className="flex items-center gap-4">
                           <img
                             src={item.image || item.product?.image || "https://via.placeholder.com/40"}
                             alt={item.team}
-                            className="h-12 w-12 rounded-lg object-cover border border-gray-700"
+                            className="h-16 w-16 rounded-xl object-contain bg-white border border-slate-100 p-1"
                           />
-                          <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-gray-700 text-xs font-medium text-gray-300">
-                            {item.size}
-                          </span>
                           <div>
-                            <p className="text-sm font-medium text-gray-100">{item.team}</p>
-                            <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
+                            <p className="text-sm font-black italic uppercase tracking-tighter text-slate-900">{item.team}</p>
+                            <div className="flex gap-3 items-center mt-1">
+                               <span className="text-[10px] font-black border border-slate-200 px-2 py-0.5 rounded text-blue-600">SIZE {item.size}</span>
+                               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Qty: {item.quantity}</span>
+                            </div>
                           </div>
                         </div>
-                        <span className="text-sm font-medium text-gray-200">₹{item.price * item.quantity}</span>
+                        <span className="text-sm font-black italic text-slate-900">₹{item.price * item.quantity}</span>
                       </li>
                     ))}
                   </ul>
-                  <div className="bg-gray-800 px-4 py-3 flex justify-between items-center border-t border-gray-700">
-                    <span className="text-sm font-medium text-gray-300">Total</span>
-                    <span className="text-lg font-bold text-white">₹{calculateTotal(selectedOrder.items).toFixed(0)}</span>
+                  <div className="bg-slate-900 p-6 flex justify-between items-center text-white">
+                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Gross Total</span>
+                    <span className="text-2xl font-black italic">₹{calculateTotal(selectedOrder.items).toLocaleString()}</span>
                   </div>
                 </div>
               </div>

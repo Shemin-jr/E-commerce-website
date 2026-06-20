@@ -284,7 +284,6 @@ import { toast } from "react-toastify";
 
 function Cart() {
   const [cart, setCart] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -358,128 +357,91 @@ function Cart() {
         : item
     );
     updateCart(newCart);
-
-    if (selectedItems.some((sel) => (sel._id || sel.id) === id && sel.size === currentSize)) {
-      setSelectedItems((prev) =>
-        prev.map((sel) =>
-          (sel._id || sel.id) === id && sel.size === currentSize
-            ? { ...sel, size: newSize }
-            : sel
-        )
-      );
-    }
   };
 
   const removeItem = (id, size) => {
     updateCart(cart.filter((item) => !((item._id || item.id) === id && item.size === size)));
-    setSelectedItems((prev) =>
-      prev.filter((s) => !((s._id || s.id) === id && s.size === size))
-    );
     toast.success("Product is removed");
   };
 
-  const toggleSelectItem = (item) => {
-    const itemId = item._id || item.id;
-    const exists = selectedItems.find(
-      (sel) => (sel._id || sel.id) === itemId && sel.size === item.size
-    );
-    if (exists) {
-      setSelectedItems(selectedItems.filter((sel) => !((sel._id || sel.id) === itemId && sel.size === item.size)));
-    } else {
-      setSelectedItems([...selectedItems, item]);
-    }
-  };
-
   const handleProceedToCheckout = () => {
-    if (selectedItems.length === 0) {
-      toast.warn("Please select at least one product to proceed to checkout!");
+    if (cart.length === 0) {
+      toast.warn("Your cart is empty.");
       return;
     }
 
-    const missingSize = selectedItems.find((item) => !item.size);
+    const missingSize = cart.find((item) => !item.size);
     if (missingSize) {
       toast.warn(`Please select a size for ${missingSize.team || missingSize.name} before proceeding.`);
       return;
     }
 
-    navigate("/checkout", { state: { products: selectedItems } });
+    navigate("/checkout", { state: { products: cart } });
   };
 
   if (cart.length === 0)
     return (
-      <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center py-20">
+      <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col items-center justify-center py-20">
         <img
           src="https://cdn-icons-png.flaticon.com/512/2038/2038854.png"
           alt="Empty cart"
-          className="w-32 mb-6 opacity-80"
+          className="w-32 mb-6 opacity-40"
         />
-        <h2 className="text-2xl font-semibold">Your cart is empty</h2>
-        <p className="text-gray-400 mt-2">Add some products to get started!</p>
+        <h2 className="text-3xl font-black italic uppercase tracking-tighter">Your cart is empty</h2>
+        <p className="text-slate-500 mt-2 font-medium">Add some products to get started!</p>
       </div>
     );
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-white text-slate-900">
 
       <div className="max-w-5xl mx-auto py-12 px-6">
 
-        <h1 className="text-4xl font-bold text-center mb-10">
-          🛍️ Your Shopping Cart
+        <h1 className="text-4xl font-black italic uppercase tracking-tighter text-center mb-10">
+           Shopping Cart
         </h1>
 
         <div className="space-y-6">
           {cart.map((item, index) => {
             const itemId = item._id || item.id;
-            const isSelected = selectedItems.some(
-              (sel) => (sel._id || sel.id) === itemId && sel.size === item.size
-            );
 
             return (
               <div
                 key={`${itemId}-${item.size || index}`}
-                className={`flex flex-col md:flex-row items-start md:items-center justify-between bg-gray-900 rounded-2xl p-6 shadow-md border ${
-                  isSelected ? "border-blue-500" : "border-gray-700"
-                }`}
+                className="flex flex-col md:flex-row items-start md:items-center justify-between rounded-3xl border border-slate-100 bg-white p-8 shadow-sm hover:shadow-xl transition-all duration-500"
               >
 
-                <input
-                  type="checkbox"
-                  checked={isSelected}
-                  onChange={() => toggleSelectItem(item)}
-                  className="mb-3 md:mb-0 accent-blue-600 scale-125 cursor-pointer"
-                />
-
-                <div className="flex items-center gap-5 w-full md:w-auto">
+                <div className="flex items-center gap-6 w-full md:w-auto">
                   <img
                     src={item.image}
                     alt={item.team || item.name}
-                    className="w-28 h-28 object-contain rounded-xl bg-gray-800 border border-gray-700"
+                    className="w-28 h-28 object-contain rounded-2xl bg-slate-50 border border-slate-100 p-2"
                   />
 
                   <div>
-                    <h2 className="text-xl font-semibold">
+                    <h2 className="text-2xl font-black italic uppercase tracking-tighter">
                       {item.team || item.name}
                     </h2>
 
-                    <p className="text-gray-400 text-sm mt-1">
+                    <p className="text-slate-500 text-sm mt-1 font-medium">
                       Category:
-                      <span className="font-medium text-white ml-1">
+                      <span className="font-bold text-sky-600 ml-1 uppercase">
                         {item.category || "N/A"}
                       </span>
                     </p>
 
                     {item.description && (
-                      <p className="text-gray-400 text-sm mt-1 line-clamp-2">
+                      <p className="text-slate-400 text-sm mt-1 line-clamp-2 max-w-sm">
                         {item.description}
                       </p>
                     )}
 
-                    <p className="font-medium mt-2">
+                    <p className="font-black italic text-xl mt-2 text-slate-900">
                       Price: ₹ {Number(item.price).toFixed(2)}
                     </p>
 
-                    <div className="mt-3">
-                      <p className={`text-sm mb-1 ${!item.size ? "text-red-500" : "text-gray-300"}`}>
+                    <div className="mt-4">
+                      <p className={`text-xs font-black uppercase tracking-widest mb-2 ${!item.size ? "text-red-500" : "text-slate-400"}`}>
                         {item.size ? "Selected Size:" : "Please Select Size:"}
                       </p>
 
@@ -488,10 +450,10 @@ function Cart() {
                           <button
                             key={size}
                             onClick={() => handleSizeSelect(item._id || item.id, item.size, size)}
-                            className={`px-3 py-1 rounded-full text-sm border ${
+                            className={`px-4 py-1.5 rounded-full text-xs font-bold border-2 transition-all duration-300 ${
                               item.size === size
-                                ? "bg-green-600 text-white border-green-600"
-                                : "border-gray-600 hover:bg-gray-700"
+                                ? "bg-slate-900 text-white border-slate-900 shadow-lg"
+                                : "border-slate-50 bg-slate-50 text-slate-400 hover:border-sky-500 hover:text-sky-600"
                             }`}
                           >
                             {size}
@@ -503,37 +465,37 @@ function Cart() {
                   </div>
                 </div>
 
-                <div className="flex flex-col items-end gap-4 mt-4 md:mt-0">
+                <div className="flex flex-col items-end gap-4 mt-6 md:mt-0">
 
-                  <div className="flex items-center gap-3 bg-gray-800 px-3 py-2 rounded-full">
+                  <div className="flex items-center gap-4 bg-slate-50 px-4 py-2 rounded-2xl border border-slate-100">
                     <button
                       onClick={() => decreaseQty(item._id || item.id, item.size)}
-                      className="px-3 py-1 bg-gray-700 rounded-full"
+                      className="w-10 h-10 flex items-center justify-center bg-white rounded-xl shadow-sm hover:bg-slate-100 transition font-black text-xl"
                     >
                       −
                     </button>
 
-                    <span className="text-lg font-semibold">
+                    <span className="text-xl font-black italic w-6 text-center">
                       {item.quantity}
                     </span>
 
                     <button
                       onClick={() => increaseQty(item._id || item.id, item.size)}
-                      className="px-3 py-1 bg-gray-700 rounded-full"
+                      className="w-10 h-10 flex items-center justify-center bg-white rounded-xl shadow-sm hover:bg-slate-100 transition font-black text-xl"
                     >
                       +
                     </button>
                   </div>
 
-                  <p className="text-gray-300 font-semibold">
-                    Total: ₹ {(item.price * item.quantity).toFixed(2)}
+                  <p className="text-slate-400 font-bold text-sm">
+                    Total: <span className="text-slate-900 font-black text-lg ml-1">₹ {(item.price * item.quantity).toFixed(2)}</span>
                   </p>
 
                   <button
                     onClick={() => removeItem(item._id || item.id, item.size)}
-                    className="text-red-400 hover:text-red-500 text-sm"
+                    className="text-red-500 hover:text-red-600 font-bold text-xs uppercase tracking-widest flex items-center gap-1 group"
                   >
-                    ✕ Remove
+                    <span className="group-hover:scale-125 transition-transform">✕</span> Remove Item
                   </button>
 
                 </div>
@@ -542,10 +504,10 @@ function Cart() {
           })}
         </div>
 
-        <div className="flex justify-end mt-10">
+        <div className="flex justify-end mt-12">
           <button
             onClick={handleProceedToCheckout}
-            className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-medium"
+            className="bg-sky-600 hover:bg-sky-700 text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest shadow-lg shadow-sky-100 transition-all duration-300 hover:translate-x-2"
           >
             🧾 Proceed to Checkout
           </button>

@@ -417,59 +417,66 @@ function Products() {
 
   if (loading && products.length === 0) {
     return (
-      <div className="min-h-screen flex justify-center items-center text-white text-2xl font-bold bg-black">
-        Loading products...
+      <div className="min-h-screen flex flex-col justify-center items-center bg-slate-50 text-slate-900">
+        <div className="w-12 h-12 border-4 border-sky-200 border-t-sky-600 rounded-full animate-spin mb-4" />
+        <p className="font-black italic uppercase tracking-widest animate-pulse">Loading Season Gear...</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-black text-white min-h-screen py-16 px-6 md:px-20">
+    <div className="bg-white text-slate-900 min-h-screen py-16 px-6 md:px-20">
 
       {/* Filter Bar */}
 
-      <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-10">
+      <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-12 bg-slate-50 p-6 rounded-3xl border border-slate-100 shadow-sm transition-all duration-500 hover:shadow-md">
 
-        <input
-          type="text"
-          placeholder="Search by team..."
-          className="w-full md:w-1/3 px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+        <div className="w-full md:w-1/3 relative">
+          <input
+            type="text"
+            placeholder="Search by team..."
+            className="w-full px-6 py-4 bg-white border border-slate-100 text-slate-900 rounded-2xl outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all font-medium placeholder:text-slate-400 shadow-sm"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
 
-        <select
-          className="w-full md:w-1/4 px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        >
-          <option value="All">All Categories</option>
-          <option value="home">Home Kit</option>
-          <option value="away">Away Kit</option>
-          <option value="special edition">Special Edition</option>
-        </select>
+        <div className="w-full md:w-1/4 relative">
+          <select
+            className="w-full px-6 py-4 bg-white border border-slate-100 text-slate-900 rounded-2xl outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all font-bold uppercase tracking-widest text-xs cursor-pointer shadow-sm appearance-none"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            <option value="All">All Categories</option>
+            <option value="home">Home Kit</option>
+            <option value="away">Away Kit</option>
+            <option value="special edition">Special Edition</option>
+          </select>
+        </div>
 
-        <select
-          className="w-full md:w-1/4 px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-          value={sortOrder}
-          onChange={(e) => setSortOrder(e.target.value)}
-        >
-          <option value="none">Sort by</option>
-          <option value="lowToHigh">Price: Low → High</option>
-          <option value="highToLow">Price: High → Low</option>
-        </select>
+        <div className="w-full md:w-1/4 relative">
+          <select
+            className="w-full px-6 py-4 bg-white border border-slate-100 text-slate-900 rounded-2xl outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all font-bold uppercase tracking-widest text-xs cursor-pointer shadow-sm appearance-none"
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+          >
+            <option value="none">Sort by</option>
+            <option value="lowToHigh">Price: Low → High</option>
+            <option value="highToLow">Price: High → Low</option>
+          </select>
+        </div>
 
       </div>
 
       {/* Products Grid */}
 
       {products.length === 0 && !loading ? (
-        <div className="text-center text-gray-400 text-xl mt-10">
-          No products found.
+        <div className="text-center text-slate-400 py-20 bg-slate-50 rounded-3xl border border-slate-100">
+          <p className="text-2xl font-black italic uppercase tracking-widest">No gear found in this section.</p>
         </div>
       ) : (
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
 
           {products.map((item) => {
 
@@ -483,68 +490,67 @@ function Products() {
 
               <div
                 key={productId}
-                className="relative bg-gray-900 text-white rounded-2xl shadow-lg overflow-hidden hover:scale-105 hover:shadow-2xl transition-all duration-300"
+                className="group relative bg-white border border-slate-100 rounded-[2.5rem] shadow-sm overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-500"
               >
 
                 {/* Wishlist */}
 
                 <div
                   onClick={() => toggleWishlist(item)}
-                  className="absolute top-3 right-3 text-2xl cursor-pointer z-10"
+                  className="absolute top-6 right-6 text-2xl cursor-pointer z-10 p-3 bg-white/80 backdrop-blur-md rounded-2xl shadow-sm hover:scale-110 transition-all"
                 >
                   {isInWishlist ? (
                     <FaHeart className="text-red-500" />
                   ) : (
-                    <FaRegHeart className="text-gray-400 hover:text-red-500" />
+                    <FaRegHeart className="text-slate-300 hover:text-red-500" />
                   )}
                 </div>
 
                 {/* Image */}
 
-                <img
-                  src={item.image}
-                  alt={item.team}
-                  className="w-full h-80 object-cover cursor-pointer"
-                  onClick={() => navigate(`/product/${productId}`)}
-                />
+                <div className="relative overflow-hidden aspect-[4/5] bg-slate-50 p-10 flex items-center justify-center">
+                  <img
+                    src={item.image}
+                    alt={item.team}
+                    className="max-h-full object-contain group-hover:scale-110 transition-transform duration-700 ease-out"
+                    onClick={() => navigate(`/product/${productId}`)}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/5 to-transparent pointer-events-none" />
+                </div>
 
                 {/* Product Info */}
 
-                <div className="p-6 text-center">
+                <div className="p-8 text-center">
 
-                  <h3 className="text-2xl font-bold text-white mb-2">
+                  <h3 className="text-xl font-black italic uppercase tracking-tighter text-slate-900 mb-2 truncate">
                     {item.team}
                   </h3>
 
-                  <p className="text-gray-400 mb-2">
-                    Category: {item.category}
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4 bg-slate-50 inline-block px-3 py-1 rounded-full border border-slate-100">
+                    {item.category}
                   </p>
 
                   {/* Price */}
 
-                  <div className="mb-4">
+                  <div className="mb-6">
 
                     {item.salePrice && new Date(item.offerExpiry) > new Date() ? (
 
                       <div className="flex flex-col items-center">
 
-                        <span className="text-gray-500 line-through text-sm">
+                        <span className="text-slate-400 line-through text-xs font-bold">
                           ₹ {item.price?.toFixed(2)}
                         </span>
 
-                        <span className="text-red-500 font-bold text-xl">
+                        <span className="text-red-600 font-black italic text-2xl tracking-tighter">
                           ₹ {Number(item.salePrice).toFixed(2)}
-                        </span>
-
-                        <span className="text-[10px] text-red-400 uppercase animate-pulse">
-                          Limited Offer!
                         </span>
 
                       </div>
 
                     ) : (
 
-                      <p className="text-green-400 font-semibold text-lg">
+                      <p className="text-sky-600 font-black italic text-2xl tracking-tighter">
                         ₹ {item.price?.toFixed(2)}
                       </p>
 
@@ -556,9 +562,9 @@ function Products() {
 
                   <button
                     onClick={() => handleAddToCart(item)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-semibold shadow-md transition-transform hover:scale-105"
+                    className="w-full bg-slate-900 hover:bg-black text-white px-6 py-4 rounded-2xl font-black uppercase tracking-widest shadow-lg shadow-slate-100 transition-all duration-300 active:scale-95 text-xs"
                   >
-                    Add to Cart
+                   Add to cart
                   </button>
 
                 </div>
@@ -577,11 +583,11 @@ function Products() {
 
       {totalPages > 1 && (
 
-        <div className="flex justify-center mt-10 gap-3">
+        <div className="flex justify-center mt-16 gap-3">
 
           <button
             onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
-            className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 disabled:bg-gray-600"
+            className="px-6 py-3 bg-white border border-slate-100 text-slate-900 rounded-xl hover:bg-slate-50 font-bold uppercase tracking-widest text-[10px] transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-sm"
             disabled={currentPage === 1}
           >
             Prev
@@ -592,11 +598,10 @@ function Products() {
             <button
               key={idx + 1}
               onClick={() => handlePageChange(idx + 1)}
-              className={`px-4 py-2 rounded-lg ${
-                currentPage === idx + 1
-                  ? "bg-green-600 text-white"
-                  : "bg-gray-800 text-white hover:bg-gray-700"
-              }`}
+              className={`w-12 h-12 flex items-center justify-center rounded-xl font-black transition-all ${currentPage === idx + 1
+                  ? "bg-sky-600 text-white shadow-lg shadow-sky-100 scale-110"
+                  : "bg-white border border-slate-100 text-slate-400 hover:bg-slate-50"
+                }`}
             >
               {idx + 1}
             </button>
@@ -607,7 +612,7 @@ function Products() {
             onClick={() =>
               handlePageChange(Math.min(currentPage + 1, totalPages))
             }
-            className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 disabled:bg-gray-600"
+            className="px-6 py-3 bg-white border border-slate-100 text-slate-900 rounded-xl hover:bg-slate-50 font-bold uppercase tracking-widest text-[10px] transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-sm"
             disabled={currentPage === totalPages}
           >
             Next
