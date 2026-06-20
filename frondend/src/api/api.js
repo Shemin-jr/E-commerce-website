@@ -1,28 +1,35 @@
-import axios from 'axios';
+import axios from "axios";
 
 const API = axios.create({
-    baseURL: 'http://localhost:5000/api',
+  baseURL: "https://jersey-backend-pl21.onrender.com",
 });
 
-// Add a request interceptor to include the auth token automatically
-API.interceptors.request.use((config) => {
+// Add token automatically
+API.interceptors.request.use(
+  (config) => {
     try {
-        const token = localStorage.getItem("token");
-        const userRaw = localStorage.getItem("user") || localStorage.getItem("currentUser");
-        const storedUser = userRaw ? JSON.parse(userRaw) : null;
+      const token = localStorage.getItem("token");
+      const userRaw =
+        localStorage.getItem("user") ||
+        localStorage.getItem("currentUser");
 
-        const finalToken = (token && token !== "undefined") ? token : (storedUser && storedUser.token);
+      const storedUser = userRaw ? JSON.parse(userRaw) : null;
 
-        if (finalToken && finalToken !== "undefined") {
-            config.headers.Authorization = `Bearer ${finalToken}`;  
-        }
+      const finalToken =
+        token && token !== "undefined"
+          ? token
+          : storedUser?.token;
+
+      if (finalToken && finalToken !== "undefined") {
+        config.headers.Authorization = `Bearer ${finalToken}`;
+      }
     } catch (err) {
-        console.error("Auth interceptor error:", err);
-        // If parsing fails, we continue without the token to allow public requests to work
+      console.error("Auth interceptor error:", err);
     }
+
     return config;
-}, (error) => {
-    return Promise.reject(error);
-});
+  },
+  (error) => Promise.reject(error)
+);
 
 export default API;
